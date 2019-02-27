@@ -21,35 +21,16 @@ export default class Trunk {
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
-    viewer.scene.primitives.add(
-      new Cesium.Cesium3DTileset({
-        url:
-          "http://47.95.1.229:9097/Resources/宁波3DTiles/宁波3DTiles格式/NO1-3DTiles/Scene/NO1m3D_Tiles.json",
-        maximumScreenSpaceError: 2,
-        maximumNumberOfLoadedTiles: 1000
-      })
-    );
-
-    viewer.scene.primitives.add(
-      new Cesium.Cesium3DTileset({
-        url:
-          "http://47.95.1.229:9097/Resources/宁波3DTiles/宁波3DTiles格式/NO2-3DTiles-2/Scene/NO2m3D_Tilesm2.json",
-        maximumScreenSpaceError: 2,
-        maximumNumberOfLoadedTiles: 1000
-      })
-    );
-
     viewer.scene.primitives
       .add(
         new Cesium.Cesium3DTileset({
-          url:
-            "http://47.95.1.229:9097/Resources/宁波3DTiles/宁波3DTiles格式/NO3-3DTiles/Scene/NO3m3D_Tiles.json",
+          url: "../mock/3dtileout/tileset.json",
           maximumScreenSpaceError: 2,
           maximumNumberOfLoadedTiles: 1000
         })
       )
       .readyPromise.then((tileset: any) => {
-        this.drawPoints(viewer);
+        // this.drawPoints(viewer);
         const boundingSphere = tileset.boundingSphere;
         viewer.camera.viewBoundingSphere(
           boundingSphere,
@@ -64,21 +45,16 @@ export default class Trunk {
 
   drawPoints = (viewer: any) => {
     ajax({
-      url: "http://47.95.1.229:9003/webapi/api/v1.1/basic/data",
-      data: {
-        key: "s_detecte_datas",
-        begin_time: "2019-02-26 14:00:00",
-        end_time: "2019-02-27 14:00:00"
-      },
+      url: "../mock/LatLon.json",
       success: ({ data }: { data: Array<any> }) => {
         for (let item of data) {
-          const { lng, lat } = item;
+          const { lng, lat, name } = item;
           viewer.entities.add({
             position: Cesium.Cartesian3.fromDegrees(
               parseFloat(lng),
               parseFloat(lat)
             ),
-            name: "Red ellipse on surface",
+            name,
             ellipse: {
               semiMinorAxis: 100,
               semiMajorAxis: 100,
