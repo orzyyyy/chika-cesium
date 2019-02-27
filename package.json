@@ -8,7 +8,7 @@
     "dist": "nino koei -c ./scripts/nino.koei.js",
     "compile": "nino compile",
     "dev": "nino koei -w-d",
-    "lint": "eslint ./src/*.tsx",
+    "lint": "eslint ./src/*.ts",
     "prettier": "nino prettier",
     "lint-staged": "lint-staged",
     "backup": "npm config set registry=https://registry.npmjs.org && npm publish && npm config set registry=https://registry.npm.taobao.org",
@@ -36,19 +36,17 @@
     "lint-staged": "^8.1.4",
     "pre-commit": "^1.2.2",
     "prettier": "^1.15.3",
-    "react-hot-loader": "^4.7.1",
     "ts-loader": "^5.3.3"
   },
   "dependencies": {
     "cesium": "^1.54.0",
-    "nino-cli": "^0.5.0",
-    "resium": "^1.2.1"
+    "nino-cli": "^0.5.0"
   },
   "pre-commit": [
     "lint-staged"
   ],
   "lint-staged": {
-    "*.{ts,js}": [
+    "*.{ts}": [
       "npm run prettier",
       "npm run lint",
       "git add"

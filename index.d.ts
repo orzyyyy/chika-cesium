@@ -3,5 +3,4 @@ declare module '*.json' {
   export default value;
 }
 
-declare module 'resium';
-declare module 'react-hot-loader';
+declare module 'cesium';
