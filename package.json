@@ -26,8 +26,6 @@
   "devDependencies": {
     "@types/cesium": "^1.47.3",
     "@types/classnames": "^2.2.7",
-    "@types/react": "^16.8.5",
-    "@types/react-dom": "^16.8.2",
     "babel-eslint": "^10.0.1",
     "classnames": "^2.2.6",
     "dekko": "^0.2.1",
