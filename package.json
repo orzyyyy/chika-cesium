@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "A modal loader using cesium",
   "scripts": {
-    "start": "nino go -c ./scripts/nino.go.js",
+    "start": "nino go -c ./scripts/nino.go.js -e ./src/demo",
     "test": "nino test",
     "dist": "nino koei -c ./scripts/nino.koei.js",
     "compile": "nino compile",
