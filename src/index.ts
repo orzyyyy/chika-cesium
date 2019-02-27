@@ -1,21 +1,17 @@
-import Cesium from 'cesium';
-import Trunk from './core';
+import Trunk from "./core";
 
-new Trunk('root', {
+new Trunk("root", {
   animation: false,
-  baseLayerPicker: true,
-  selectedImageryProviderViewModel: undefined,
-  vrButton: true,
+  // baseLayerPicker: false,
+  vrButton: false,
   geocoder: false,
-  homeButton: true,
-  infoBox: true,
-  sceneModePicker: true,
-  selectionIndicator: true,
+  infoBox: false,
+  sceneModePicker: false,
+  selectionIndicator: false,
   timeline: false,
   navigationHelpButton: false,
-  navigationInstructionsInitiallyVisible: false,
   scene3DOnly: false,
-  useDefaultRenderLoop: true,
-  targetFrameRate: 100,
-  globe: new Cesium.Globe(new Cesium.WebMercatorProjection().ellipsoid),
+  homeButton: false,
+  navigationInstructionsInitiallyVisible: false,
+  fullscreenButton: false
 });
