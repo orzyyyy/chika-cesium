@@ -52,7 +52,7 @@ export default class Trunk {
     );
 
     tileset.readyPromise
-      .then(function(tileset: any) {
+      .then((tileset: any) => {
         const boundingSphere = tileset.boundingSphere;
         viewer.camera.viewBoundingSphere(
           boundingSphere,
@@ -60,7 +60,7 @@ export default class Trunk {
         );
         viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
       })
-      .otherwise(function(error: any) {
+      .otherwise((error: any) => {
         console.log(error);
       });
   }
