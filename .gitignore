@@ -5,4 +5,4 @@
 
 *.rar
 *.map
-/src/**/*.js
+/src/**/*.jsx
