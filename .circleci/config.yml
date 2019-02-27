@@ -4,11 +4,11 @@ references:
   container_config: &container_config
     docker:
       - image: circleci/node:10.0.0
-    working_directory: ~/mini-xmind
+    working_directory: ~/chika-cesium
 
   attach_workspace: &attach_workspace
     attach_workspace:
-      at: ~/mini-xmind
+      at: ~/chika-cesium
 
 jobs:
   setup:
@@ -24,7 +24,7 @@ jobs:
             npm ls
             true
       - persist_to_workspace:
-          root: ~/mini-xmind
+          root: ~/chika-cesium
           paths:
             - node_modules
   lint:
@@ -47,7 +47,7 @@ jobs:
       - run: npm run build
       - run: node ./scripts/dekko-dist.js
       - persist_to_workspace:
-          root: ~/mini-xmind
+          root: ~/chika-cesium
           paths:
             - dist
   compile:
@@ -58,7 +58,7 @@ jobs:
       - run: npm run compile
       - run: node ./scripts/dekko-lib.js
       - persist_to_workspace:
-          root: ~/mini-xmind
+          root: ~/chika-cesium
           paths:
             - lib
   test_dist:
