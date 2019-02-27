@@ -8,18 +8,8 @@ export default class Trunk {
       viewer.baseLayerPicker.viewModel.imageryProviderViewModels;
     viewer.baseLayerPicker.viewModel.selectedImagery =
       imageryProviderViewModels[6];
-    const canvas = viewer.scene.canvas;
-    const ellipsoid = viewer.scene.globe.ellipsoid;
-    const handler = new Cesium.ScreenSpaceEventHandler(canvas);
-    handler.setInputAction((movement: any) => {
-      const cartesian = viewer.camera.pickEllipsoid(
-        movement.endPosition,
-        ellipsoid
-      );
-      if (cartesian) {
-        viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian);
-      }
-    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+    // this.showCoordinate(viewer);
 
     viewer.scene.primitives
       .add(
@@ -30,7 +20,7 @@ export default class Trunk {
         })
       )
       .readyPromise.then((tileset: any) => {
-        // this.drawPoints(viewer);
+        this.drawPoints(viewer);
         const boundingSphere = tileset.boundingSphere;
         viewer.camera.viewBoundingSphere(
           boundingSphere,
@@ -64,5 +54,32 @@ export default class Trunk {
         }
       }
     });
+  };
+
+  showCoordinate = (viewer: any) => {
+    const canvas = viewer.scene.canvas;
+    const ellipsoid = viewer.scene.globe.ellipsoid;
+    const handler = new Cesium.ScreenSpaceEventHandler(canvas);
+    handler.setInputAction((movement: any) => {
+      const cartesian = viewer.camera.pickEllipsoid(
+        movement.endPosition,
+        ellipsoid
+      );
+      if (cartesian) {
+        const cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(
+          cartesian
+        );
+        const latitude = Cesium.Math.toDegrees(cartographic.latitude).toFixed(
+          4
+        );
+        const longitude = Cesium.Math.toDegrees(cartographic.longitude).toFixed(
+          4
+        );
+        const altitude = (
+          viewer.camera.positionCartographic.height / 1000
+        ).toFixed(2);
+        console.log(longitude, latitude, altitude);
+      }
+    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   };
 }
