@@ -6,7 +6,7 @@ const defaultViewerOptions = {
   geocoder: false,
   infoBox: false,
   sceneModePicker: false,
-  selectionIndicator: false,
+  // selectionIndicator: false,
   timeline: false,
   navigationHelpButton: false,
   scene3DOnly: false,
@@ -26,15 +26,26 @@ export default class Trunk {
     if (options.dev) {
       this.consoleCoordinate(viewer);
     }
-
     if (options.pointDatas) {
       this.drawPoints(viewer, options.pointDatas);
     }
-
     if (options.modalPaths) {
       this.loadModals(viewer, options.modalPaths);
     }
+    if (options.onClick) {
+      this.bindClickEvent(viewer, options.onClick);
+    }
   }
+
+  bindClickEvent = (viewer: any, callback?: any) => {
+    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    handler.setInputAction((click: any) => {
+      const pick = viewer.scene.pick(click.position);
+      if (pick && pick.id && callback) {
+        callback(pick.id.name);
+      }
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  };
 
   loadModals = (viewer: any, paths: Array<string>) => {
     for (let url of paths) {
@@ -63,9 +74,9 @@ export default class Trunk {
   drawPoints = (viewer: any, datas: Array<any>) => {
     const pinBuilder = new Cesium.PinBuilder();
     for (let item of datas) {
-      const { lng, lat, name } = item;
+      const { lng, lat, id, name } = item;
       viewer.entities.add({
-        name,
+        name: id,
         position: Cesium.Cartesian3.fromDegrees(
           parseFloat(lng),
           parseFloat(lat),
