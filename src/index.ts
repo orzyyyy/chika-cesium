@@ -1,3 +1,1 @@
-import Trunk from "./core";
-
-export default Trunk;
+export { default as Trunk } from "./core";

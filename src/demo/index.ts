@@ -1,4 +1,4 @@
-import Trunk from "..";
+import { Trunk } from "..";
 import { ajax } from "../urlHelper";
 
 ajax({
