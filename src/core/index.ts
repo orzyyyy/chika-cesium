@@ -1,15 +1,35 @@
 import Cesium from "cesium";
-import { ajax } from "../urlHelper";
+
+const defaultViewerOptions = {
+  animation: false,
+  vrButton: false,
+  geocoder: false,
+  infoBox: false,
+  sceneModePicker: false,
+  selectionIndicator: false,
+  timeline: false,
+  navigationHelpButton: false,
+  scene3DOnly: false,
+  homeButton: false,
+  navigationInstructionsInitiallyVisible: false,
+  fullscreenButton: false
+};
 
 export default class Trunk {
   constructor(root: string | Element, options?: any) {
-    const viewer = new Cesium.Viewer(root, options);
+    const viewer = new Cesium.Viewer(root, defaultViewerOptions);
     const imageryProviderViewModels =
       viewer.baseLayerPicker.viewModel.imageryProviderViewModels;
     viewer.baseLayerPicker.viewModel.selectedImagery =
       imageryProviderViewModels[6];
 
-    // this.showCoordinate(viewer);
+    if (options.dev) {
+      this.consoleCoordinate(viewer);
+    }
+
+    if (options.drawPoints) {
+      options.drawPoints(viewer);
+    }
 
     viewer.scene.primitives
       .add(
@@ -20,7 +40,6 @@ export default class Trunk {
         })
       )
       .readyPromise.then((tileset: any) => {
-        this.drawPoints(viewer);
         const boundingSphere = tileset.boundingSphere;
         viewer.camera.viewBoundingSphere(
           boundingSphere,
@@ -33,30 +52,7 @@ export default class Trunk {
       });
   }
 
-  drawPoints = (viewer: any) => {
-    ajax({
-      url: "../mock/LatLon.json",
-      success: ({ data }: { data: Array<any> }) => {
-        for (let item of data) {
-          const { lng, lat, name } = item;
-          viewer.entities.add({
-            position: Cesium.Cartesian3.fromDegrees(
-              parseFloat(lng),
-              parseFloat(lat)
-            ),
-            name,
-            ellipse: {
-              semiMinorAxis: 100,
-              semiMajorAxis: 100,
-              material: Cesium.Color.RED.withAlpha(0.5)
-            }
-          });
-        }
-      }
-    });
-  };
-
-  showCoordinate = (viewer: any) => {
+  consoleCoordinate = (viewer: any) => {
     const canvas = viewer.scene.canvas;
     const ellipsoid = viewer.scene.globe.ellipsoid;
     const handler = new Cesium.ScreenSpaceEventHandler(canvas);
