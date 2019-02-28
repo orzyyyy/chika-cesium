@@ -27,30 +27,56 @@ export default class Trunk {
       this.consoleCoordinate(viewer);
     }
 
-    if (options.drawPoints) {
-      options.drawPoints(viewer);
+    if (options.pointDatas) {
+      this.drawPoints(viewer, options.pointDatas);
     }
 
-    viewer.scene.primitives
-      .add(
-        new Cesium.Cesium3DTileset({
-          url: "../mock/3dtileout/tileset.json",
-          maximumScreenSpaceError: 2,
-          maximumNumberOfLoadedTiles: 1000
-        })
-      )
-      .readyPromise.then((tileset: any) => {
-        const boundingSphere = tileset.boundingSphere;
-        viewer.camera.viewBoundingSphere(
-          boundingSphere,
-          new Cesium.HeadingPitchRange(0.0, -0.5, boundingSphere.radius)
-        );
-        viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
-      })
-      .otherwise((error: any) => {
-        console.log(error);
-      });
+    if (options.modalPaths) {
+      this.loadModals(viewer, options.modalPaths);
+    }
   }
+
+  loadModals = (viewer: any, paths: Array<string>) => {
+    for (let url of paths) {
+      viewer.scene.primitives
+        .add(
+          new Cesium.Cesium3DTileset({
+            url,
+            maximumScreenSpaceError: 2,
+            maximumNumberOfLoadedTiles: 1000
+          })
+        )
+        .readyPromise.then((tileset: any) => {
+          const boundingSphere = tileset.boundingSphere;
+          viewer.camera.viewBoundingSphere(
+            boundingSphere,
+            new Cesium.HeadingPitchRange(0.0, -0.5, boundingSphere.radius)
+          );
+          viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+        })
+        .otherwise((error: any) => {
+          console.error(error);
+        });
+    }
+  };
+
+  drawPoints = (viewer: any, datas: Array<any>) => {
+    for (let item of datas) {
+      const { lng, lat, name } = item;
+      viewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(
+          parseFloat(lng),
+          parseFloat(lat)
+        ),
+        name,
+        ellipse: {
+          semiMinorAxis: 10,
+          semiMajorAxis: 10,
+          material: Cesium.Color.BLUE.withAlpha(0.5)
+        }
+      });
+    }
+  };
 
   consoleCoordinate = (viewer: any) => {
     const canvas = viewer.scene.canvas;
