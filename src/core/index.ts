@@ -61,18 +61,21 @@ export default class Trunk {
   };
 
   drawPoints = (viewer: any, datas: Array<any>) => {
+    const pinBuilder = new Cesium.PinBuilder();
     for (let item of datas) {
       const { lng, lat, name } = item;
       viewer.entities.add({
+        name,
         position: Cesium.Cartesian3.fromDegrees(
           parseFloat(lng),
-          parseFloat(lat)
+          parseFloat(lat),
+          30
         ),
-        name,
-        ellipse: {
-          semiMinorAxis: 10,
-          semiMajorAxis: 10,
-          material: Cesium.Color.BLUE.withAlpha(0.5)
+        billboard: {
+          image: pinBuilder
+            .fromText(name, Cesium.Color.ORANGE, 100)
+            .toDataURL(),
+          verticalOrigin: Cesium.VerticalOrigin.BOTTOM
         }
       });
     }
