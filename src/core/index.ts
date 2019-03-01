@@ -86,7 +86,9 @@ export default class Trunk {
           image: pinBuilder
             .fromText(name, Cesium.Color.ORANGE, 100)
             .toDataURL(),
-          verticalOrigin: Cesium.VerticalOrigin.BOTTOM
+          verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+          width: name.length * 40,
+          height: name.length * 30
         }
       });
     }
