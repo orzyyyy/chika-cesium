@@ -6,7 +6,7 @@ ajax({
   success: ({ data }: { data: Array<any> }) => {
     new Trunk('root', {
       pointDatas: data,
-      modalPaths: ['../mock/3dtileout/tileset.json'],
+      modelPaths: ['../mock/3dtileout/tileset.json'],
       onClick: (id: string) => {
         const iframe: HTMLElement | null = document.getElementById('modal');
         if (iframe) {

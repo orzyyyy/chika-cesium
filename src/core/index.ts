@@ -1,4 +1,4 @@
-import Cesium from "cesium";
+import Cesium from 'cesium';
 
 const defaultViewerOptions = {
   animation: false,
@@ -29,8 +29,8 @@ export default class Trunk {
     if (options.pointDatas) {
       this.drawPoints(viewer, options.pointDatas);
     }
-    if (options.modalPaths) {
-      this.loadModals(viewer, options.modalPaths);
+    if (options.modelPaths) {
+      this.loadModals(viewer, options.modelPaths);
     }
     if (options.onClick) {
       this.bindClickEvent(viewer, options.onClick);
