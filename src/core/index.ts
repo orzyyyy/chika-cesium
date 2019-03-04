@@ -23,17 +23,20 @@ export default class Trunk {
     viewer.baseLayerPicker.viewModel.selectedImagery =
       imageryProviderViewModels[6];
 
-    if (options.dev) {
+    if ('dev' in options) {
       this.consoleCoordinate(viewer);
     }
-    if (options.pointDatas) {
+    if ('pointDatas' in options) {
       this.drawPoints(viewer, options.pointDatas);
     }
-    if (options.modelPaths) {
+    if ('modelPaths' in options) {
       this.loadModals(viewer, options.modelPaths);
     }
-    if (options.onClick) {
+    if ('onClick' in options) {
       this.bindClickEvent(viewer, options.onClick);
+    }
+    if ('polygon' in options) {
+      this.drawPolygon(viewer, options.polygon);
     }
   }
 
@@ -92,6 +95,32 @@ export default class Trunk {
         },
       });
     }
+  };
+
+  drawPolygon = (
+    viewer: any,
+    polygon: {
+      dataSource: Array<{ lng: number; lat: number }>;
+      name?: string;
+      color?: string;
+    },
+  ) => {
+    // handle with coordinates
+    let result = [];
+    for (let item of polygon.dataSource) {
+      const { lng, lat } = item;
+      result.push(lng);
+      result.push(lat);
+    }
+    viewer.entities.add({
+      name: polygon.name || 'undefined polygon name',
+      polygon: {
+        hierarchy: Cesium.Cartesian3.fromDegreesArray(result),
+        material:
+          Cesium.Color.fromCssColorString(polygon.color) ||
+          Cesium.Color.CHOCOLATE,
+      },
+    });
   };
 
   consoleCoordinate = (viewer: any) => {
