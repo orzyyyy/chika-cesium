@@ -12,7 +12,7 @@ const defaultViewerOptions = {
   scene3DOnly: false,
   homeButton: false,
   navigationInstructionsInitiallyVisible: false,
-  fullscreenButton: false
+  fullscreenButton: false,
 };
 
 export default class Trunk {
@@ -54,14 +54,14 @@ export default class Trunk {
           new Cesium.Cesium3DTileset({
             url,
             maximumScreenSpaceError: 2,
-            maximumNumberOfLoadedTiles: 1000
-          })
+            maximumNumberOfLoadedTiles: 1000,
+          }),
         )
         .readyPromise.then((tileset: any) => {
           const boundingSphere = tileset.boundingSphere;
           viewer.camera.viewBoundingSphere(
             boundingSphere,
-            new Cesium.HeadingPitchRange(0.0, -0.5, boundingSphere.radius)
+            new Cesium.HeadingPitchRange(0.0, -0.5, boundingSphere.radius),
           );
           viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
         })
@@ -80,7 +80,7 @@ export default class Trunk {
         position: Cesium.Cartesian3.fromDegrees(
           parseFloat(lng),
           parseFloat(lat),
-          30
+          30,
         ),
         billboard: {
           image: pinBuilder
@@ -88,8 +88,8 @@ export default class Trunk {
             .toDataURL(),
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
           width: name.length * 40,
-          height: name.length * 30
-        }
+          height: name.length * 30,
+        },
       });
     }
   };
@@ -101,21 +101,22 @@ export default class Trunk {
     handler.setInputAction((movement: any) => {
       const cartesian = viewer.camera.pickEllipsoid(
         movement.endPosition,
-        ellipsoid
+        ellipsoid,
       );
       if (cartesian) {
         const cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(
-          cartesian
+          cartesian,
         );
         const latitude = Cesium.Math.toDegrees(cartographic.latitude).toFixed(
-          4
+          4,
         );
         const longitude = Cesium.Math.toDegrees(cartographic.longitude).toFixed(
-          4
+          4,
         );
         const altitude = (
           viewer.camera.positionCartographic.height / 1000
         ).toFixed(2);
+        // eslint-disable-next-line
         console.log(longitude, latitude, altitude);
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
