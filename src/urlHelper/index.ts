@@ -1,8 +1,8 @@
 // import { fetch } from 'whatwg-fetch';
-import { path, proxy, isDev } from "./path";
+import { path, proxy, isDev } from './path';
 
-const types = ["json", "html", "text"];
-const methods = ["GET", "POST", "PUT", "DELETE"];
+const types = ['json', 'html', 'text'];
+const methods = ['GET', 'POST', 'PUT', 'DELETE'];
 export interface ajaxProps {
   url?: string;
   key?: any;
@@ -31,14 +31,14 @@ export interface ajaxProps {
 const ajax = ({
   url,
   key,
-  method = "GET",
+  method = 'GET',
   data,
-  type = "json",
+  type = 'json',
   success,
   params,
-  fix = "&",
+  fix = '&',
   isProxy = false,
-  error
+  error,
 }: ajaxProps) => {
   let realUrl,
     realParams,
@@ -52,11 +52,11 @@ const ajax = ({
 
   realParams = getRealParams(realUrl, data, fix);
 
-  if (method != "GET") {
+  if (method != 'GET') {
     postParam = {
       body: JSON.stringify(data),
       method,
-      headers: { "Content-Type": "application/json" }
+      headers: { 'Content-Type': 'application/json' },
     };
   }
 
@@ -68,37 +68,33 @@ const ajax = ({
     .catch(err => error && error(err));
 };
 
-export const checkMethod = (method: any) => {
+export const checkMethod = (method: string) => {
   if (!method) {
-    console.error("fetch method is undefined.");
-
-    return;
+    console.error('fetch method is undefined.');
+    return false;
   }
 
   method = method.toUpperCase();
 
   if (!methods.includes(method)) {
-    console.error("fetch method error.");
-
-    return;
+    console.error('fetch method error.');
+    return false;
   }
 
   return method;
 };
 
-export const checkType = (type: any) => {
+export const checkType = (type: string) => {
   if (!type) {
-    console.error("fetch type is undefined.");
-
-    return;
+    console.error('fetch type is undefined.');
+    return false;
   }
 
   type = type.toLowerCase();
 
   if (!types.includes(type)) {
-    console.error("fetch type error.");
-
-    return;
+    console.error('fetch type error.');
+    return false;
   }
 
   return type;
@@ -106,10 +102,10 @@ export const checkType = (type: any) => {
 
 export const getRealParams = (url: string, data: any, fixStr: string) => {
   if (!url || !data) {
-    return "";
+    return '';
   }
 
-  let fix = url.includes("?") ? fixStr : "?";
+  let fix = url.includes('?') ? fixStr : '?';
   let result = serialize(data, fixStr);
 
   if (result) {
@@ -121,20 +117,20 @@ export const getRealParams = (url: string, data: any, fixStr: string) => {
 
 export const serialize = (data: any, fixStr?: string) => {
   if (!data || Object.keys(data).length == 0 || data instanceof Array) {
-    return "";
+    return '';
   }
 
-  if (typeof data == "string") {
+  if (typeof data == 'string') {
     return data;
   }
 
-  let paramStr = "";
+  let paramStr = '';
 
   for (let key of Object.keys(data)) {
     paramStr += `${key}=${data[key]}${fixStr}`;
   }
 
-  paramStr = paramStr.substr(0, paramStr.length - (fixStr == "&" ? 1 : 3));
+  paramStr = paramStr.substr(0, paramStr.length - (fixStr == '&' ? 1 : 3));
 
   return paramStr;
 };
@@ -143,7 +139,7 @@ export const getRealUrl = (
   key: string,
   path: any,
   proxy?: string,
-  isProxy?: boolean
+  isProxy?: boolean,
 ) => {
   let realUrl;
 
@@ -156,7 +152,7 @@ export const getRealUrl = (
   }
 
   if (!realUrl) {
-    return;
+    return false;
   }
 
   if (proxy && isProxy) {
