@@ -30,6 +30,7 @@ export default class Trunk {
     },
   ) {
     const viewer = new Cesium.Viewer(root, defaultViewerOptions);
+    (viewer as any)._cesiumWidget._creditContainer.style.display = 'none';
     const imageryProviderViewModels =
       viewer.baseLayerPicker.viewModel.imageryProviderViewModels;
     viewer.baseLayerPicker.viewModel.selectedImagery =
