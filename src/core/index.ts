@@ -120,7 +120,8 @@ export default class Trunk {
         polygon: {
           hierarchy: Cesium.Cartesian3.fromDegreesArray(result),
           material:
-            Cesium.Color.fromCssColorString(color) || Cesium.Color.CHOCOLATE,
+            (color && Cesium.Color.fromCssColorString(color)) ||
+            Cesium.Color.CHOCOLATE,
         },
       });
     }
