@@ -74,9 +74,36 @@ export default class Trunk {
     }
   };
 
-  drawPoints = (viewer: any, datas: Array<any>) => {
+  getCenterPointFromCoordinates = ({
+    dataSource,
+    name,
+    id,
+  }: {
+    dataSource: Array<{
+      lng: number;
+      lat: number;
+    }>;
+    name?: string;
+    id?: string;
+  }) => {
+    const total = dataSource.length;
+    let totalLng = 0;
+    let totalLat = 0;
+    for (let { lng, lat } of dataSource) {
+      totalLng += lng;
+      totalLat += lat;
+    }
+    return {
+      lng: totalLng / total,
+      lat: totalLat / total,
+      name,
+      id,
+    };
+  };
+
+  drawPoints = (viewer: any, dataSource: Array<any>) => {
     const pinBuilder = new Cesium.PinBuilder();
-    for (let item of datas) {
+    for (let item of dataSource) {
       const { lng, lat, id, name } = item;
       viewer.entities.add({
         name: id,
@@ -105,6 +132,7 @@ export default class Trunk {
       color?: string;
     }>,
   ) => {
+    let centers = [];
     for (let polygonItem of polygon) {
       let result = [];
       const { dataSource, name, color } = polygonItem;
@@ -124,7 +152,9 @@ export default class Trunk {
             Cesium.Color.CHOCOLATE,
         },
       });
+      centers.push(this.getCenterPointFromCoordinates(polygonItem));
     }
+    this.drawPoints(viewer, centers);
   };
 
   consoleCoordinate = (viewer: any) => {
