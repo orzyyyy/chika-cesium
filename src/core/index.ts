@@ -40,7 +40,7 @@ export default class Trunk {
     }
   }
 
-  bindClickEvent = (viewer: any, callback?: any) => {
+  bindClickEvent = (viewer: any, callback?: Function) => {
     const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
     handler.setInputAction((click: any) => {
       const pick = viewer.scene.pick(click.position);
