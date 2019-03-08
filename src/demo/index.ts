@@ -62,15 +62,15 @@ new Trunk('root', {
   onHover: (dataItem: any, { x, y }: any) => {
     const tooltip: HTMLElement | null = document.getElementById('tooltip');
     if (tooltip) {
-      let table = '<table style="width: 100%;"><tr>';
+      let table = '<table style="width: 100%; text-align: center;"><tr>';
       if (dataItem) {
         for (let column of dataItem.table.columns) {
           table += `<th>${column.name}</th>`;
         }
         table += '</tr>';
-        for (let column of dataItem.table.columns) {
+        for (let item of dataItem.table.dataSource) {
           table += '<tr>';
-          for (let item of dataItem.table.dataSource) {
+          for (let column of dataItem.table.columns) {
             table += `<td>${item[column.key]}</td>`;
           }
           table += '</tr>';
