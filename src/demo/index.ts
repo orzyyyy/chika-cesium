@@ -19,7 +19,18 @@ new Trunk('root', {
       // name: 'test',
       color: '#F96',
       id: 'test1',
-      tableDatas: [],
+      table: {
+        columns: [
+          { key: 'name', name: '名称' },
+          { key: 'title', name: '标题' },
+          { key: 'place', name: '地点' },
+        ],
+        dataSource: [
+          { name: '名称1', title: '标题1', place: '地点1' },
+          { name: '名称2', title: '标题2', place: '地点2' },
+          { name: '名称3', title: '标题3', place: '地点3' },
+        ],
+      },
     },
   ],
   onClick: ({ name: id }: any) => {
@@ -48,16 +59,30 @@ new Trunk('root', {
       }
     }
   },
-  onHover: ({ tableDatas }: any, { x, y }: any) => {
+  onHover: (dataItem: any, { x, y }: any) => {
     const tooltip: HTMLElement | null = document.getElementById('tooltip');
     if (tooltip) {
-      for (let item of tableDatas) {
-        tooltip.innerHTML = `
-          <div style="position: absolute; top: ${y}px; left: ${x}px; z-index: 2; background: #fff; width: 10px; height: 10px;">
-            ${item}
-          </div>
-        `;
+      let table = '<table style="width: 100%;"><tr>';
+      if (dataItem) {
+        for (let column of dataItem.table.columns) {
+          table += `<th>${column.name}</th>`;
+        }
+        table += '</tr>';
+        for (let column of dataItem.table.columns) {
+          table += '<tr>';
+          for (let item of dataItem.table.dataSource) {
+            table += `<td>${item[column.key]}</td>`;
+          }
+          table += '</tr>';
+        }
+        table += '</table>';
       }
+      tooltip.innerHTML = `
+        <div style="position: absolute; top: ${y - 100 - 15}px; left: ${x -
+        100}px; z-index: 2; background: #fff; width: 200px; height: 100px;">
+          ${table}
+        </div>
+      `;
     }
   },
 });
