@@ -18,39 +18,64 @@ const defaultViewerOptions = {
 export default class Trunk {
   viewer: any;
 
-  constructor(root: string | Element, options?: any) {
+  constructor(
+    root: string | Element,
+    options?: {
+      dev?: boolean;
+      pointDatas?: Array<any>;
+      modelPaths?: Array<any>;
+      onClick?: (name: string, position: any, pick: any) => void;
+      onHover?: (name: string, position: any, pick: any) => void;
+      polygon?: Array<any>;
+    },
+  ) {
     const viewer = new Cesium.Viewer(root, defaultViewerOptions);
     const imageryProviderViewModels =
       viewer.baseLayerPicker.viewModel.imageryProviderViewModels;
     viewer.baseLayerPicker.viewModel.selectedImagery =
       imageryProviderViewModels[6];
 
-    if ('dev' in options) {
-      this.consoleCoordinate(viewer);
-    }
-    if ('pointDatas' in options) {
-      this.drawPoints(viewer, options.pointDatas);
-    }
-    if ('modelPaths' in options) {
-      this.loadModals(viewer, options.modelPaths);
-    }
-    if ('onClick' in options) {
-      this.bindClickEvent(viewer, options.onClick);
-    }
-    if ('polygon' in options) {
-      this.drawPolygon(viewer, options.polygon);
+    if (options) {
+      if (options.dev) {
+        this.consoleCoordinate(viewer);
+      }
+      if (options.pointDatas) {
+        this.drawPoints(viewer, options.pointDatas);
+      }
+      if (options.modelPaths) {
+        this.loadModals(viewer, options.modelPaths);
+      }
+      if (options.onClick) {
+        this.bindClickEvent(viewer, options.onClick);
+      }
+      if (options.onHover) {
+        this.bindHoverEvent(viewer, options.onHover);
+      }
+      if (options.polygon) {
+        this.drawPolygon(viewer, options.polygon);
+      }
     }
     this.viewer = viewer;
   }
 
   bindClickEvent = (viewer: any, callback?: Function) => {
     const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-    handler.setInputAction((click: any) => {
-      const pick = viewer.scene.pick(click.position);
+    handler.setInputAction(({ position }: any) => {
+      const pick = viewer.scene.pick(position);
       if (pick && pick.id && callback) {
-        callback(pick.id.name);
+        callback(pick.id, position, pick);
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  };
+
+  bindHoverEvent = (viewer: any, callback?: Function) => {
+    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    handler.setInputAction(({ endPosition }: any) => {
+      const pick = viewer.scene.pick(endPosition);
+      if (Cesium.defined(pick) && pick && pick.id && callback) {
+        callback(pick.id, endPosition, pick);
+      }
+    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   };
 
   loadModals = (viewer: any, paths: Array<string>) => {

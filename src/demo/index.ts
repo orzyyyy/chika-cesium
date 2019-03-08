@@ -21,7 +21,7 @@ new Trunk('root', {
       id: 'test1',
     },
   ],
-  onClick: (id: string) => {
+  onClick: ({ name: id }: any) => {
     const iframe: HTMLElement | null = document.getElementById('modal');
     if (iframe) {
       iframe.innerHTML = `
@@ -45,6 +45,15 @@ new Trunk('root', {
           iframe.innerHTML = '';
         });
       }
+    }
+  },
+  onHover: (_: any, { x, y }: any) => {
+    const tooltip: HTMLElement | null = document.getElementById('tooltip');
+    if (tooltip) {
+      tooltip.innerHTML = `
+        <div style="position: absolute; top: ${y}px; left: ${x}px; z-index: 2; background: #fff; width: 10px; height: 10px;">
+        </div>
+      `;
     }
   },
 });
