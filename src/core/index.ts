@@ -16,6 +16,8 @@ const defaultViewerOptions = {
 };
 
 export default class Trunk {
+  viewer: any;
+
   constructor(root: string | Element, options?: any) {
     const viewer = new Cesium.Viewer(root, defaultViewerOptions);
     const imageryProviderViewModels =
@@ -38,6 +40,7 @@ export default class Trunk {
     if ('polygon' in options) {
       this.drawPolygon(viewer, options.polygon);
     }
+    this.viewer = viewer;
   }
 
   bindClickEvent = (viewer: any, callback?: Function) => {
