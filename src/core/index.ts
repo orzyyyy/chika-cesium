@@ -44,7 +44,7 @@ export default class Trunk {
         this.drawPoints(viewer, options.pointDatas);
       }
       if (options.modelPaths) {
-        this.loadModals(viewer, options.modelPaths);
+        this.loadModels(viewer, options.modelPaths);
       }
       if (options.onClick) {
         this.bindClickEvent(viewer, options.onClick);
@@ -83,7 +83,7 @@ export default class Trunk {
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   };
 
-  loadModals = (viewer: any, paths: Array<string>) => {
+  loadModels = (viewer: any, paths: Array<string>) => {
     for (let url of paths) {
       viewer.scene.primitives
         .add(
