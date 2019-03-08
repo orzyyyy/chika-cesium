@@ -16,7 +16,7 @@ new Trunk('root', {
         { lng: 121.4485, lat: 0.0406 },
         { lng: 121.449, lat: 0.0392 },
       ],
-      name: 'test',
+      // name: 'test',
       color: '#F96',
       id: 'test1',
     },

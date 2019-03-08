@@ -81,6 +81,7 @@ export default class Trunk {
     dataSource,
     name,
     id,
+    color,
   }: {
     dataSource: Array<{
       lng: number;
@@ -88,6 +89,7 @@ export default class Trunk {
     }>;
     name?: string;
     id?: string;
+    color?: string;
   }) => {
     const total = dataSource.length;
     let totalLng = 0;
@@ -101,29 +103,54 @@ export default class Trunk {
       lat: totalLat / total,
       name,
       id,
+      color,
     };
   };
 
   drawPoints = (viewer: any, dataSource: Array<any>) => {
     const pinBuilder = new Cesium.PinBuilder();
     for (let item of dataSource) {
-      const { lng, lat, id, name } = item;
-      viewer.entities.add({
-        name: id,
-        position: Cesium.Cartesian3.fromDegrees(
-          parseFloat(lng),
-          parseFloat(lat),
-          30,
-        ),
-        billboard: {
-          image: pinBuilder
-            .fromText(name, Cesium.Color.ORANGE, 100)
-            .toDataURL(),
-          verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-          width: name.length * 40,
-          height: name.length * 30,
-        },
-      });
+      const { lng, lat, id, name, color } = item;
+      if (name) {
+        viewer.entities.add({
+          name: id,
+          position: Cesium.Cartesian3.fromDegrees(
+            parseFloat(lng),
+            parseFloat(lat),
+            30,
+          ),
+          billboard: {
+            image: pinBuilder
+              .fromText(name, Cesium.Color.ORANGE, 100)
+              .toDataURL(),
+            verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+            width: name.length * 40,
+            height: name.length * 30,
+          },
+        });
+      } else {
+        (Cesium as any).when(
+          pinBuilder.fromMakiIconId(
+            'building',
+            Cesium.Color.fromCssColorString(color),
+            60,
+          ),
+          (canvas: any) => {
+            return viewer.entities.add({
+              name: id,
+              position: Cesium.Cartesian3.fromDegrees(
+                parseFloat(lng),
+                parseFloat(lat),
+                30,
+              ),
+              billboard: {
+                image: canvas.toDataURL(),
+                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+              },
+            });
+          },
+        );
+      }
     }
   };
 
