@@ -73,8 +73,12 @@ export default class Trunk {
     const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
     handler.setInputAction(({ endPosition }: any) => {
       const pick = viewer.scene.pick(endPosition);
-      if (Cesium.defined(pick) && pick && pick.id && callback) {
-        callback(pick.id!._customData, endPosition, pick);
+      if (callback) {
+        if (Cesium.defined(pick) && pick && pick.id) {
+          callback(pick.id!._customData, endPosition, pick);
+        } else {
+          callback(null, endPosition, pick);
+        }
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   };

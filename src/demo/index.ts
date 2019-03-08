@@ -61,7 +61,7 @@ new Trunk('root', {
   },
   onHover: (dataItem: any, { x, y }: any) => {
     const tooltip: HTMLElement | null = document.getElementById('tooltip');
-    if (tooltip) {
+    if (tooltip && dataItem) {
       let table = '<table style="width: 100%; text-align: center;"><tr>';
       if (dataItem) {
         for (let column of dataItem.table.columns) {
@@ -83,6 +83,8 @@ new Trunk('root', {
           ${table}
         </div>
       `;
+    } else if (tooltip && !dataItem) {
+      tooltip.innerHTML = '';
     }
   },
 });
