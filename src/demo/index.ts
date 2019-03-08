@@ -19,6 +19,7 @@ new Trunk('root', {
       // name: 'test',
       color: '#F96',
       id: 'test1',
+      tableDatas: [],
     },
   ],
   onClick: ({ name: id }: any) => {
@@ -47,13 +48,16 @@ new Trunk('root', {
       }
     }
   },
-  onHover: (_: any, { x, y }: any) => {
+  onHover: ({ tableDatas }: any, { x, y }: any) => {
     const tooltip: HTMLElement | null = document.getElementById('tooltip');
     if (tooltip) {
-      tooltip.innerHTML = `
-        <div style="position: absolute; top: ${y}px; left: ${x}px; z-index: 2; background: #fff; width: 10px; height: 10px;">
-        </div>
-      `;
+      for (let item of tableDatas) {
+        tooltip.innerHTML = `
+          <div style="position: absolute; top: ${y}px; left: ${x}px; z-index: 2; background: #fff; width: 10px; height: 10px;">
+            ${item}
+          </div>
+        `;
+      }
     }
   },
 });

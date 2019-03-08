@@ -73,7 +73,7 @@ export default class Trunk {
     handler.setInputAction(({ endPosition }: any) => {
       const pick = viewer.scene.pick(endPosition);
       if (Cesium.defined(pick) && pick && pick.id && callback) {
-        callback(pick.id, endPosition, pick);
+        callback(pick.id!._customData, endPosition, pick);
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   };
@@ -199,6 +199,7 @@ export default class Trunk {
         result.push(lat);
       }
       viewer.entities.add({
+        customData: polygonItem,
         name: name || 'undefined polygon name',
         polygon: {
           hierarchy: Cesium.Cartesian3.fromDegreesArray(result),
