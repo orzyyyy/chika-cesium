@@ -99,28 +99,31 @@ export default class Trunk {
 
   drawPolygon = (
     viewer: any,
-    polygon: {
+    polygon: Array<{
       dataSource: Array<{ lng: number; lat: number }>;
       name?: string;
       color?: string;
-    },
+    }>,
   ) => {
-    // handle with coordinates
-    let result = [];
-    for (let item of polygon.dataSource) {
-      const { lng, lat } = item;
-      result.push(lng);
-      result.push(lat);
+    for (let polygonItem of polygon) {
+      let result = [];
+      const { dataSource, name, color } = polygonItem;
+      // handle with coordinates
+      // { lng, lat } => [lng, lat]
+      for (let item of dataSource) {
+        const { lng, lat } = item;
+        result.push(lng);
+        result.push(lat);
+      }
+      viewer.entities.add({
+        name: name || 'undefined polygon name',
+        polygon: {
+          hierarchy: Cesium.Cartesian3.fromDegreesArray(result),
+          material:
+            Cesium.Color.fromCssColorString(color) || Cesium.Color.CHOCOLATE,
+        },
+      });
     }
-    viewer.entities.add({
-      name: polygon.name || 'undefined polygon name',
-      polygon: {
-        hierarchy: Cesium.Cartesian3.fromDegreesArray(result),
-        material:
-          Cesium.Color.fromCssColorString(polygon.color) ||
-          Cesium.Color.CHOCOLATE,
-      },
-    });
   };
 
   consoleCoordinate = (viewer: any) => {

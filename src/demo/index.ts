@@ -7,22 +7,24 @@ ajax({
     new Trunk('root', {
       pointDatas: data,
       modelPaths: ['../mock/3dtileout/tileset.json'],
-      polygon: {
-        dataSource: [
-          {
-            lng: 121.449,
-            lat: 0.0382,
-          },
-          {
-            lng: 121.4485,
-            lat: 0.0388,
-          },
-          { lng: 121.4485, lat: 0.0406 },
-          { lng: 121.449, lat: 0.0392 },
-        ],
-        name: 'test',
-        color: '#F96',
-      },
+      polygon: [
+        {
+          dataSource: [
+            {
+              lng: 121.449,
+              lat: 0.0382,
+            },
+            {
+              lng: 121.4485,
+              lat: 0.0388,
+            },
+            { lng: 121.4485, lat: 0.0406 },
+            { lng: 121.449, lat: 0.0392 },
+          ],
+          name: 'test',
+          color: '#F96',
+        },
+      ],
       onClick: (id: string) => {
         const iframe: HTMLElement | null = document.getElementById('modal');
         if (iframe) {
