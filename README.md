@@ -24,7 +24,7 @@ For more detail, you can check [here](./src/demo/index.ts).
 
 ```jsx
 type PointType = 'pin' | 'text' | 'none' | undefined;
-type PolygonItem = {
+type CommonItem = {
   dataSource: Array<{
     lng: number,
     lat: number,
@@ -33,25 +33,30 @@ type PolygonItem = {
   id?: string,
   color?: string,
   type?: PointType,
+  table?: TableItem,
+  width?: number | string,
 };
 ```
 
 | name       | description                                                                                                                                                                               | type                              | default |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------- |
 | dev        | notice your console when set to true, it will output coordinate infos                                                                                                                     | boolean                           | false   |
-| pointDatas | draw pinners in the scene, notice that if data item contains prop `name`, it would draw a pinner with text of `name`, or it would draw using [icons](https://labs.mapbox.com/maki-icons/) | Array<{}: PolygonItem>            | []      |
+| pointDatas | draw pinners in the scene, notice that if data item contains prop `name`, it would draw a pinner with text of `name`, or it would draw using [icons](https://labs.mapbox.com/maki-icons/) | Array<{}: CommonItem>             | []      |
 | modelPaths | load models with paths, notice that this prop is null, it wouldn't show anything. Emmmm...maybe                                                                                           | Array<paths: string>              | []      |
-| polygon    | draw polygons with coordinates                                                                                                                                                            | Array<{}: PolygonItem>            | []      |
+| polygon    | draw polygons with coordinates                                                                                                                                                            | Array<{}: CommonItem>             | []      |
+| line       | draw lines with coordinates                                                                                                                                                               | Array<{}: CommonItem>             | []      |
 | onClick    | when you click your entities, this function would be called                                                                                                                               | (pick.id, position, pick) => void | -       |
 | onHover    | when you hover on your entities, this function would be called                                                                                                                            | (pick.id, position, pick) => void | -       |
 
-Note `PolygonItem`:
+Note `CommonItem`:
 
 if you want to draw pin on polygon, you should pass prop `id`,
 
 and in other case like drawing `text`, you should pass props both `id` and `name`,
 
 `name` for text showing in pin, and `id` will be passed back in callback like `onClick`
+
+`width` is using for `drawLine`
 
 ## Development
 
