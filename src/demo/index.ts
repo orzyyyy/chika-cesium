@@ -1,4 +1,5 @@
 import { Trunk } from '..';
+import './assets/popup.css';
 
 new Trunk('root', {
   modelPaths: ['../mock/3dtileout/tileset.json'],
@@ -62,7 +63,9 @@ new Trunk('root', {
   onHover: (dataItem: any, { x, y }: any) => {
     const tooltip: HTMLElement | null = document.getElementById('tooltip');
     if (tooltip && dataItem) {
-      let table = '<table style="width: 100%; text-align: center;"><tr>';
+      const tableHeight = 150;
+      const tableWidth = 200;
+      let table = `<table style="text-align: center; width: 100%; height: ${tableHeight}px;" class="popup-content-wrapper"><tr>`;
       if (dataItem) {
         for (let column of dataItem.table.columns) {
           table += `<th>${column.name}</th>`;
@@ -77,9 +80,12 @@ new Trunk('root', {
         }
         table += '</table>';
       }
+      table += '<div class="popup-tip-container popup-tip"></div>';
       tooltip.innerHTML = `
-        <div style="position: absolute; top: ${y - 100 - 15}px; left: ${x -
-        100}px; z-index: 2; background: #fff; width: 200px; height: 100px;">
+        <div style="position: absolute; top: ${y -
+          tableHeight -
+          15}px; left: ${x -
+        tableWidth / 2}px; z-index: 2; width: 200px; height: ${tableHeight}px;">
           ${table}
         </div>
       `;
