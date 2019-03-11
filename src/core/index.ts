@@ -17,15 +17,22 @@ const defaultViewerOptions = {
 };
 
 type PointType = 'pin' | 'text' | 'none' | undefined;
-type PolygonItem = {
+type TableItem = {
+  columns: Array<{ key: string; name: string }>;
+  dataSource: Array<any>;
+};
+type CommonItem = {
   dataSource: Array<{
     lng: number;
     lat: number;
+    height?: number;
   }>;
   name?: string;
   id?: string;
   color?: string;
   type?: PointType;
+  table?: TableItem;
+  width?: number | string;
 };
 
 export default class Trunk {
@@ -36,10 +43,11 @@ export default class Trunk {
     options?: {
       dev?: boolean;
       pointDatas?: Array<any>;
-      modelPaths?: Array<any>;
+      modelPaths?: Array<string>;
       onClick?: (name: string, position: any, pick: any) => void;
       onHover?: (name: string, position: any, pick: any) => void;
-      polygon?: Array<any>;
+      polygon?: Array<CommonItem>;
+      line?: Array<CommonItem>;
     },
   ) {
     const viewer = new Cesium.Viewer(root, defaultViewerOptions);
@@ -64,11 +72,15 @@ export default class Trunk {
       if (options.polygon) {
         this.drawPolygon(viewer, options.polygon);
       }
+      if (options.line) {
+        this.drawLine(viewer, options.line);
+      }
     }
     this.viewer = viewer;
+    return this;
   }
 
-  bindClickEvent = (viewer: any, callback?: Function) => {
+  private bindClickEvent = (viewer: any, callback?: Function) => {
     const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
     handler.setInputAction(({ position }: any) => {
       const pick = viewer.scene.pick(position);
@@ -78,7 +90,7 @@ export default class Trunk {
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
   };
 
-  bindHoverEvent = (viewer: any, callback?: Function) => {
+  private bindHoverEvent = (viewer: any, callback?: Function) => {
     const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
     handler.setInputAction(({ endPosition }: any) => {
       const pick = viewer.scene.pick(endPosition);
@@ -92,7 +104,7 @@ export default class Trunk {
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   };
 
-  loadModels = (viewer: any, paths: Array<string>) => {
+  private loadModels = (viewer: any, paths: Array<string>) => {
     for (let url of paths) {
       viewer.scene.primitives
         .add(
@@ -116,7 +128,10 @@ export default class Trunk {
     }
   };
 
-  getCenterPointFromCoordinates = ({ dataSource, ...rest }: PolygonItem) => {
+  private getCenterPointFromCoordinates = ({
+    dataSource,
+    ...rest
+  }: CommonItem) => {
     const total = dataSource.length;
     let totalLng = 0;
     let totalLat = 0;
@@ -179,11 +194,11 @@ export default class Trunk {
     }
   };
 
-  drawPolygon = (viewer: any, polygon: Array<PolygonItem>) => {
+  drawPolygon = (viewer: any, polygon: Array<CommonItem>) => {
     let centers = [];
-    for (let polygonItem of polygon) {
+    for (let CommonItem of polygon) {
       let result = [];
-      const { dataSource, id, color } = polygonItem;
+      const { dataSource, id, color } = CommonItem;
       // handle with coordinates
       // { lng, lat } => [lng, lat]
       for (let item of dataSource) {
@@ -192,7 +207,7 @@ export default class Trunk {
         result.push(lat);
       }
       viewer.entities.add({
-        customData: polygonItem,
+        customData: CommonItem,
         name: id || 'undefined polygon name',
         polygon: {
           hierarchy: Cesium.Cartesian3.fromDegreesArray(result),
@@ -201,12 +216,41 @@ export default class Trunk {
             Cesium.Color.CHOCOLATE,
         },
       });
-      centers.push(this.getCenterPointFromCoordinates(polygonItem));
+      centers.push(this.getCenterPointFromCoordinates(CommonItem));
     }
     this.drawPoints(viewer, centers);
   };
 
-  consoleCoordinate = (viewer: any) => {
+  drawLine = (viewer: any, line: Array<CommonItem>) => {
+    for (let lineItem of line) {
+      let result = [];
+      const { dataSource, id, color, width } = lineItem;
+      // handle with coordinates
+      // { lng, lat } => [lng, lat]
+      for (let item of dataSource) {
+        const { lng, lat, height } = item;
+        result.push(lng);
+        result.push(lat);
+        if (height) {
+          result.push(height);
+        }
+      }
+      viewer.entities.add({
+        name: id || 'undefined line name',
+        polyline: {
+          customData: lineItem,
+          positions: Cesium.Cartesian3.fromDegreesArrayHeights(result),
+          width,
+          arcType: (Cesium as any).ArcType.RHUMB,
+          material:
+            (color && Cesium.Color.fromCssColorString(color)) ||
+            Cesium.Color.CHOCOLATE,
+        },
+      });
+    }
+  };
+
+  private consoleCoordinate = (viewer: any) => {
     const canvas = viewer.scene.canvas;
     const ellipsoid = viewer.scene.globe.ellipsoid;
     const handler = new Cesium.ScreenSpaceEventHandler(canvas);

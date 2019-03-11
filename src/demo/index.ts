@@ -1,8 +1,29 @@
 import { Trunk } from '..';
 import './assets/popup.css';
 
-new Trunk('root', {
+const instance = new Trunk('root', {
   modelPaths: ['../mock/3dtileout/tileset.json'],
+  line: [
+    {
+      dataSource: [
+        {
+          lng: 121.449,
+          lat: 0.0382,
+          height: 28,
+        },
+        {
+          lng: 121.4485,
+          lat: 0.0388,
+          height: 40,
+        },
+        { lng: 121.4485, lat: 0.0406, height: 40 },
+        { lng: 121.449, lat: 0.0392, height: 40 },
+      ],
+      color: 'red',
+      id: 'testLine',
+      width: 5,
+    },
+  ],
   polygon: [
     {
       dataSource: [
@@ -95,3 +116,5 @@ new Trunk('root', {
     }
   },
 });
+
+console.log(instance);
