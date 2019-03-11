@@ -16,7 +16,7 @@ import { Trunk } from '..';
 new Trunk('root', options);
 ```
 
-For more detail, you can check [there](./src/demo/index.ts).
+For more detail, you can check [here](./src/demo/index.ts).
 
 ## API
 
