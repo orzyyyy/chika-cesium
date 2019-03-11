@@ -17,9 +17,10 @@ new Trunk('root', {
         { lng: 121.4485, lat: 0.0406 },
         { lng: 121.449, lat: 0.0392 },
       ],
-      // name: 'test',
+      id: 'testId',
+      name: 'testName',
       color: '#F96',
-      id: 'test1',
+      type: 'pin',
       table: {
         columns: [
           { key: 'name', name: '名称' },
@@ -35,19 +36,19 @@ new Trunk('root', {
     },
   ],
   onClick: ({ name: id }: any) => {
-    const iframe: HTMLElement | null = document.getElementById('modal');
-    if (iframe) {
-      iframe.innerHTML = `
-        <iframe
-          src="https://www.baidu.com/?id=${id}"
-          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"
-        >
-        </iframe>
+    const modal: HTMLElement | null = document.getElementById('modal');
+    if (modal) {
+      modal.innerHTML = `
         <div
-          style="position: absolute; top: 10px; right: 10px; z-index: 2;"
+          style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: #FFF;"
+        >
+          ${id}
+        </div>
+        <div
+          style="position: absolute; top: 10px; right: 10px; z-index: 2; font-size: 22px; cursor: pointer;"
           id="closeButton"
         >
-          close
+          X
         </div>
       `;
       const closeButton: HTMLElement | null = document.getElementById(
@@ -55,7 +56,7 @@ new Trunk('root', {
       );
       if (closeButton) {
         closeButton.addEventListener('click', _ => {
-          iframe.innerHTML = '';
+          modal.innerHTML = '';
         });
       }
     }
@@ -85,7 +86,7 @@ new Trunk('root', {
         <div style="position: absolute; top: ${y -
           tableHeight -
           15}px; left: ${x -
-        tableWidth / 2}px; z-index: 2; width: 200px; height: ${tableHeight}px;">
+        tableWidth / 2}px; width: ${tableWidth}px; height: ${tableHeight}px;">
           ${table}
         </div>
       `;

@@ -6,13 +6,25 @@ const defaultViewerOptions = {
   geocoder: false,
   infoBox: false,
   sceneModePicker: false,
-  // selectionIndicator: false,
+  selectionIndicator: false,
   timeline: false,
   navigationHelpButton: false,
   scene3DOnly: false,
   homeButton: false,
   navigationInstructionsInitiallyVisible: false,
   fullscreenButton: false,
+};
+
+type PointType = 'pin' | 'text' | 'none' | undefined;
+type PolygonItem = {
+  dataSource: Array<{
+    lng: number;
+    lat: number;
+  }>;
+  name?: string;
+  id?: string;
+  color?: string;
+  type?: PointType;
 };
 
 export default class Trunk {
@@ -107,20 +119,7 @@ export default class Trunk {
     }
   };
 
-  getCenterPointFromCoordinates = ({
-    dataSource,
-    name,
-    id,
-    color,
-  }: {
-    dataSource: Array<{
-      lng: number;
-      lat: number;
-    }>;
-    name?: string;
-    id?: string;
-    color?: string;
-  }) => {
+  getCenterPointFromCoordinates = ({ dataSource, ...rest }: PolygonItem) => {
     const total = dataSource.length;
     let totalLng = 0;
     let totalLat = 0;
@@ -131,19 +130,17 @@ export default class Trunk {
     return {
       lng: totalLng / total,
       lat: totalLat / total,
-      name,
-      id,
-      color,
+      ...rest,
     };
   };
 
   drawPoints = (viewer: any, dataSource: Array<any>) => {
     const pinBuilder = new Cesium.PinBuilder();
     for (let item of dataSource) {
-      const { lng, lat, id, name, color } = item;
-      if (name) {
+      const { lng, lat, id, name, color, type } = item;
+      if (type === 'text') {
         viewer.entities.add({
-          name: id,
+          name,
           position: Cesium.Cartesian3.fromDegrees(
             parseFloat(lng),
             parseFloat(lat),
@@ -158,7 +155,7 @@ export default class Trunk {
             height: name.length * 30,
           },
         });
-      } else {
+      } else if (type === 'pin') {
         (Cesium as any).when(
           pinBuilder.fromMakiIconId(
             'building',
@@ -180,22 +177,16 @@ export default class Trunk {
             });
           },
         );
+      } else if (type === 'none') {
       }
     }
   };
 
-  drawPolygon = (
-    viewer: any,
-    polygon: Array<{
-      dataSource: Array<{ lng: number; lat: number }>;
-      name?: string;
-      color?: string;
-    }>,
-  ) => {
+  drawPolygon = (viewer: any, polygon: Array<PolygonItem>) => {
     let centers = [];
     for (let polygonItem of polygon) {
       let result = [];
-      const { dataSource, name, color } = polygonItem;
+      const { dataSource, id, color } = polygonItem;
       // handle with coordinates
       // { lng, lat } => [lng, lat]
       for (let item of dataSource) {
@@ -205,7 +196,7 @@ export default class Trunk {
       }
       viewer.entities.add({
         customData: polygonItem,
-        name: name || 'undefined polygon name',
+        name: id || 'undefined polygon name',
         polygon: {
           hierarchy: Cesium.Cartesian3.fromDegreesArray(result),
           material:
