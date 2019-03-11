@@ -28,6 +28,7 @@ type CommonItem = {
   dataSource: Array<{
     lng: number,
     lat: number,
+    height?: number,
   }>,
   name?: string,
   id?: string,
