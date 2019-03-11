@@ -13,6 +13,7 @@ const defaultViewerOptions = {
   homeButton: false,
   navigationInstructionsInitiallyVisible: false,
   fullscreenButton: false,
+  baseLayerPicker: false,
 };
 
 type PointType = 'pin' | 'text' | 'none' | undefined;
@@ -43,10 +44,6 @@ export default class Trunk {
   ) {
     const viewer = new Cesium.Viewer(root, defaultViewerOptions);
     (viewer as any)._cesiumWidget._creditContainer.style.display = 'none';
-    const imageryProviderViewModels =
-      viewer.baseLayerPicker.viewModel.imageryProviderViewModels;
-    viewer.baseLayerPicker.viewModel.selectedImagery =
-      imageryProviderViewModels[6];
 
     if (options) {
       if (options.dev) {
