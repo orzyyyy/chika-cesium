@@ -16,7 +16,7 @@ const defaultViewerOptions = {
   baseLayerPicker: false,
 };
 
-type PointType = 'pin' | 'text' | 'none' | undefined;
+export type PointType = 'pin' | 'text' | 'none' | undefined;
 type TableItem = {
   columns: Array<{ key: string; name: string }>;
   dataSource: Array<any>;
@@ -48,6 +48,7 @@ export default class Trunk {
       onHover?: (name: string, position: any, pick: any) => void;
       polygon?: Array<CommonItem>;
       line?: Array<CommonItem>;
+      onMount?: (instance: Trunk) => void;
     },
   ) {
     const viewer = new Cesium.Viewer(root, defaultViewerOptions);
@@ -74,6 +75,9 @@ export default class Trunk {
       }
       if (options.line) {
         this.drawLine(viewer, options.line);
+      }
+      if (options.onMount) {
+        options.onMount(this);
       }
     }
     this.viewer = viewer;
@@ -189,16 +193,16 @@ export default class Trunk {
             });
           },
         );
-      } else if (type === 'none') {
+      } else if (type === 'none' || !type) {
       }
     }
   };
 
   drawPolygon = (viewer: any, polygon: Array<CommonItem>) => {
     let centers = [];
-    for (let CommonItem of polygon) {
+    for (let item of polygon) {
       let result = [];
-      const { dataSource, id, color } = CommonItem;
+      const { dataSource, id, color } = item;
       // handle with coordinates
       // { lng, lat } => [lng, lat]
       for (let item of dataSource) {
@@ -207,16 +211,14 @@ export default class Trunk {
         result.push(lat);
       }
       viewer.entities.add({
-        customData: CommonItem,
+        customData: item,
         name: id || 'undefined polygon name',
         polygon: {
           hierarchy: Cesium.Cartesian3.fromDegreesArray(result),
-          material:
-            (color && Cesium.Color.fromCssColorString(color)) ||
-            Cesium.Color.CHOCOLATE,
+          material: this.formatColor(color),
         },
       });
-      centers.push(this.getCenterPointFromCoordinates(CommonItem));
+      centers.push(this.getCenterPointFromCoordinates(item));
     }
     this.drawPoints(viewer, centers);
   };
@@ -242,12 +244,20 @@ export default class Trunk {
           positions: Cesium.Cartesian3.fromDegreesArrayHeights(result),
           width,
           arcType: (Cesium as any).ArcType.RHUMB,
-          material:
-            (color && Cesium.Color.fromCssColorString(color)) ||
-            Cesium.Color.CHOCOLATE,
+          material: this.formatColor(color),
         },
       });
     }
+  };
+
+  private formatColor = (color: string | undefined) => {
+    let material: Cesium.Color | string | undefined = color;
+    if (!color) {
+      material = Cesium.Color.TRANSPARENT;
+    } else if (color) {
+      material = Cesium.Color.fromCssColorString(color);
+    }
+    return material;
   };
 
   private consoleCoordinate = (viewer: any) => {
