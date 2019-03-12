@@ -48,6 +48,7 @@ type CommonItem = {
 | line       | draw lines with coordinates                                                                                                                                                               | Array<{}: CommonItem>             | []      |
 | onClick    | when you click your entities, this function would be called                                                                                                                               | (pick.id, position, pick) => void | -       |
 | onHover    | when you hover on your entities, this function would be called                                                                                                                            | (pick.id, position, pick) => void | -       |
+| onMount    | when initial completed, this would be called with current instance of Trunk                                                                                                               | (trunk: Trunk) => void            | -       |
 
 Note `CommonItem`:
 
