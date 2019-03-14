@@ -43,14 +43,14 @@ const polygonProps = [
     type: 'pin' as PointType,
     table: {
       columns: [
-        { key: 'name', name: '名称' },
-        { key: 'title', name: '标题' },
-        { key: 'place', name: '地点' },
+        { key: 'name', name: 'name' },
+        { key: 'title', name: 'title' },
+        { key: 'place', name: 'place' },
       ],
       dataSource: [
-        { name: '名称1', title: '标题1', place: '地点1' },
-        { name: '名称2', title: '标题2', place: '地点2' },
-        { name: '名称3', title: '标题3', place: '地点3' },
+        { name: 'name1', title: 'title1', place: 'place1' },
+        { name: 'name2', title: 'title2', place: 'place2' },
+        { name: 'name3', title: 'title3', place: 'place3' },
       ],
     },
   },
@@ -105,8 +105,8 @@ const trunk = new Trunk('root', {
   onHover: (dataItem: any, { x, y }: any) => {
     const tooltip: HTMLElement | null = document.getElementById('tooltip');
     if (tooltip && dataItem) {
-      const tableHeight = 150;
-      const tableWidth = 200;
+      const tableHeight = 200;
+      const tableWidth = 400;
       let table = `<table style="text-align: center; width: 100%; height: ${tableHeight}px;" class="popup-content-wrapper"><tr>`;
       if (dataItem) {
         for (let column of dataItem.table.columns) {
