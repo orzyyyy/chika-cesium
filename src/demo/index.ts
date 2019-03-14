@@ -1,6 +1,10 @@
 import { Trunk } from '..';
 import './assets/popup.css';
 import { PointType } from '../core';
+import Switch from 'weatherstar-switch';
+import 'weatherstar-switch/dist/switch.css';
+
+let switchStatus = 'hidden';
 
 const lineProps = [
   {
@@ -59,22 +63,47 @@ const polygonProps = [
 const trunk = new Trunk('root', {
   modelPaths: ['../mock/3dtileout/tileset.json'],
   onMount: (trunk: Trunk) => {
-    const switchWrapper = document.createElement('div');
-    switchWrapper.className = 'switch';
-    switchWrapper.innerText = 'switch';
-    switchWrapper.onclick = () => {
-      trunk.viewer.entities.removeAll();
-      let newPolygonProps = [];
-      for (let item of polygonProps) {
-        newPolygonProps.push({
-          ...item,
-          color: 'rgba(255,255,255,0)',
-        });
-      }
-      trunk.drawPolygon(viewer, newPolygonProps);
-      trunk.drawLine(viewer, lineProps);
-    };
+    const switchWrapper = document.createElement('input');
+    switchWrapper.className = 'switch-wrapper';
+    switchWrapper.type = 'checkbox';
     document.body.appendChild(switchWrapper);
+    const switchInstance = new Switch(
+      document.querySelector('.switch-wrapper'),
+      {
+        onText: 'show',
+        offText: 'hide',
+        showText: true,
+        checked: true,
+        onInit: () => {
+          const switchSpan: any = document.querySelector('.switch');
+          switchSpan.style.position = 'absolute';
+          switchSpan.style.right = '10px';
+          switchSpan.style.top = '10px';
+          switchSpan.style.width = '80px';
+          setTimeout(() => {
+            switchInstance.on();
+          }, 0);
+        },
+        onChange: () => {
+          trunk.viewer.entities.removeAll();
+          let newPolygonProps = [];
+          if (switchStatus === 'hidden') {
+            newPolygonProps = polygonProps;
+            switchStatus = 'show';
+          } else {
+            for (let item of polygonProps) {
+              newPolygonProps.push({
+                ...item,
+                color: 'rgba(255,255,255,0)',
+              });
+            }
+            switchStatus = 'hidden';
+          }
+          trunk.drawPolygon(viewer, newPolygonProps);
+          trunk.drawLine(viewer, lineProps);
+        },
+      },
+    );
   },
   onClick: ({ name: id }: any) => {
     const modal: HTMLElement | null = document.getElementById('modal');
