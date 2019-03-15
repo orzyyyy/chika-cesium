@@ -2,7 +2,7 @@ import Cesium from 'cesium';
 import Model, { ModelProps } from '../tools/model';
 import DevTool, { DevToolProps } from '../tools/dev';
 import Point, { PointProps } from '../tools/point';
-import { getCenterPointFromCoordinates } from '../utils';
+import { PointType } from '../tools/point';
 
 const defaultViewerOptions = {
   animation: false,
@@ -20,24 +20,25 @@ const defaultViewerOptions = {
   baseLayerPicker: false,
 };
 
-export type PointType = 'pin' | 'text' | 'none' | undefined;
 type TableItem = {
   columns: Array<{ key: string; name: string }>;
   dataSource: Array<any>;
 };
+type CoordinateItem = {
+  lng: number;
+  lat: number;
+  height?: number;
+};
 export type CommonItem = {
-  dataSource: Array<{
-    lng: number;
-    lat: number;
-    height?: number;
-  }>;
+  dataSource: Array<CoordinateItem>;
   name?: string;
   id?: string;
   color?: string;
   type?: PointType;
   table?: TableItem;
+  text?: string;
   width?: number | string;
-};
+} & CoordinateItem;
 
 export default class Trunk {
   viewer: Cesium.Viewer;
@@ -136,7 +137,6 @@ export default class Trunk {
   };
 
   drawPolygon = (viewer: any, polygon: Array<CommonItem>) => {
-    let centers = [];
     for (let item of polygon) {
       let result = [];
       const { dataSource, id, color } = item;
@@ -155,9 +155,7 @@ export default class Trunk {
           material: this.formatColor(color),
         },
       });
-      centers.push(getCenterPointFromCoordinates(item));
     }
-    // this.drawPoints(viewer, centers);
   };
 
   drawLine = (viewer: any, line: Array<CommonItem>) => {
