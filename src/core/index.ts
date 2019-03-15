@@ -96,9 +96,32 @@ export default class Trunk {
 
   private bindHoverEvent = (viewer: any, callback?: Function) => {
     const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+
+    const makeProperty = (entity: Cesium.Entity, color: Cesium.Color) => {
+      const colorProperty: any = new Cesium.CallbackProperty((_, result) => {
+        if (pickedEntities.contains(entity)) {
+          return Cesium.Color.YELLOW.withAlpha(0.5).clone(result);
+        }
+        return color.clone(result);
+      }, false);
+      entity.polygon.material = new Cesium.ColorMaterialProperty(colorProperty);
+    };
+    const pickedEntities = new (Cesium as any).EntityCollection();
     handler.setInputAction(({ endPosition }: any) => {
-      const pick = viewer.scene.pick(endPosition);
+      const drillPick = viewer.scene.drillPick(endPosition);
+      if (Cesium.defined(drillPick)) {
+        pickedEntities.removeAll();
+        for (let i = 0; i < drillPick.length; i++) {
+          const entity = drillPick[i].id;
+          if (entity) {
+            makeProperty(entity, Cesium.Color.RED.withAlpha(0.5));
+            pickedEntities.add(entity);
+          }
+        }
+      }
+
       if (callback) {
+        const pick = viewer.scene.pick(endPosition);
         if (Cesium.defined(pick) && pick && pick.id) {
           callback(pick.id!._customData, endPosition, pick);
         } else {
