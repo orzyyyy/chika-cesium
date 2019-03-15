@@ -1,4 +1,4 @@
-import { Trunk } from '..';
+import { ChikaToy as Trunk } from '..';
 import './assets/popup.css';
 import { PointType } from '../dispatcher';
 import Switch from 'weatherstar-switch';

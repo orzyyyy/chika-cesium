@@ -1,1 +1,1 @@
-export { default as Trunk } from './dispatcher';
+export { default as ChikaToy } from './dispatcher';
