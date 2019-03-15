@@ -17,6 +17,7 @@ export default class Model {
         }
       });
     }
+    return this;
   }
 
   private loadModels = (

@@ -17,6 +17,7 @@ export default class DevTool {
     if (coordinate) {
       this.consoleCoordinate(viewer, coordinate);
     }
+    return this;
   }
 
   private consoleCoordinate = (viewer: any, callback: CoordinateFunction) => {

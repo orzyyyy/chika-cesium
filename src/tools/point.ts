@@ -12,6 +12,7 @@ export default class Point {
     if (dataSource) {
       this.drawPoints(viewer, dataSource);
     }
+    return this;
   }
 
   drawPoints = (viewer: any, dataSource: Array<any>) => {
