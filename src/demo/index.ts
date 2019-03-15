@@ -6,22 +6,23 @@ import 'weatherstar-switch/dist/switch.css';
 
 let switchStatus = 'hidden';
 
+const dataSource = [
+  {
+    lng: 121.449,
+    lat: 0.0382,
+    height: 28,
+  },
+  {
+    lng: 121.4485,
+    lat: 0.0388,
+    height: 40,
+  },
+  { lng: 121.4485, lat: 0.0406, height: 40 },
+  { lng: 121.449, lat: 0.0392, height: 40 },
+];
 const lineProps = [
   {
-    dataSource: [
-      {
-        lng: 121.449,
-        lat: 0.0382,
-        height: 28,
-      },
-      {
-        lng: 121.4485,
-        lat: 0.0388,
-        height: 40,
-      },
-      { lng: 121.4485, lat: 0.0406, height: 40 },
-      { lng: 121.449, lat: 0.0392, height: 40 },
-    ],
+    dataSource,
     color: 'red',
     id: 'testLine',
     width: 5,
@@ -29,18 +30,7 @@ const lineProps = [
 ];
 const polygonProps = [
   {
-    dataSource: [
-      {
-        lng: 121.449,
-        lat: 0.0382,
-      },
-      {
-        lng: 121.4485,
-        lat: 0.0388,
-      },
-      { lng: 121.4485, lat: 0.0406 },
-      { lng: 121.449, lat: 0.0392 },
-    ],
+    dataSource,
     id: 'testId',
     name: 'testName',
     color: '#F96',
