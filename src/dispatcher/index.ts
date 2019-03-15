@@ -2,6 +2,8 @@ import Cesium from 'cesium';
 import Model, { ModelProps } from '../tools/model';
 import DevTool, { DevToolProps } from '../tools/dev';
 import Point, { PointProps } from '../tools/point';
+import Line, { LineProps } from '../tools/line';
+import Polygon, { PolygonProps } from '../tools/polygon';
 import { PointType } from '../tools/point';
 
 const defaultViewerOptions = {
@@ -39,56 +41,43 @@ export type CommonItem = {
   text?: string;
   width?: number | string;
 } & CoordinateItem;
+type TrunkProps = {
+  dev?: DevToolProps;
+  model?: ModelProps;
+  point?: PointProps;
+  onClick?: (name: string, position: any, pick: any) => void;
+  onHover?: (name: string, position: any, pick: any) => void;
+  polygon?: PolygonProps;
+  line?: LineProps;
+  onMount?: (instance: Trunk) => void;
+};
 
 export default class Trunk {
   viewer: Cesium.Viewer;
   model: Model;
   devTool: DevTool;
   point: Point;
+  line: Line;
+  polygon: Polygon;
 
-  constructor(
-    root: string | HTMLElement,
-    options?: {
-      dev?: DevToolProps;
-      model?: ModelProps;
-      point?: PointProps;
-      onClick?: (name: string, position: any, pick: any) => void;
-      onHover?: (name: string, position: any, pick: any) => void;
-      polygon?: Array<CommonItem>;
-      line?: Array<CommonItem>;
-      onMount?: (instance: Trunk) => void;
-    },
-  ) {
+  constructor(root: string | HTMLElement, options?: TrunkProps) {
     const viewer = new Cesium.Viewer(root, defaultViewerOptions);
     (viewer as any)._cesiumWidget._creditContainer.style.display = 'none';
-
-    if (options) {
-      if (options.model) {
-        this.model = new Model(viewer, options.model);
-      }
-      if (options.dev) {
-        this.devTool = new DevTool(viewer, options.dev);
-      }
-      if (options.point) {
-        this.point = new Point(viewer, options.point);
-      }
-      if (options.onClick) {
-        this.bindClickEvent(viewer, options.onClick);
-      }
-      if (options.onHover) {
-        this.bindHoverEvent(viewer, options.onHover);
-      }
-      if (options.polygon) {
-        this.drawPolygon(viewer, options.polygon);
-      }
-      if (options.line) {
-        this.drawLine(viewer, options.line);
-      }
-      if (options.onMount) {
-        options.onMount(this);
-      }
-    }
     this.viewer = viewer;
+    if (!options) {
+      options = {};
+    }
+
+    this.devTool = new DevTool(viewer, options.dev);
+    this.model = new Model(viewer, options.model);
+    this.point = new Point(viewer, options.point);
+    this.polygon = new Polygon(viewer, options.polygon);
+    this.line = new Line(viewer, options.line);
+    this.bindClickEvent(viewer, options.onClick);
+    this.bindHoverEvent(viewer, options.onHover);
+    if (options.onMount) {
+      options.onMount(this);
+    }
     return this;
   }
 
@@ -137,64 +126,5 @@ export default class Trunk {
         }
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-  };
-
-  drawPolygon = (viewer: any, polygon: Array<CommonItem>) => {
-    for (let item of polygon) {
-      let result = [];
-      const { dataSource, id, color } = item;
-      // handle with coordinates
-      // { lng, lat } => [lng, lat]
-      for (let item of dataSource) {
-        const { lng, lat } = item;
-        result.push(lng);
-        result.push(lat);
-      }
-      viewer.entities.add({
-        customData: item,
-        name: id || 'undefined polygon name',
-        polygon: {
-          hierarchy: Cesium.Cartesian3.fromDegreesArray(result),
-          material: this.formatColor(color),
-        },
-      });
-    }
-  };
-
-  drawLine = (viewer: any, line: Array<CommonItem>) => {
-    for (let lineItem of line) {
-      let result = [];
-      const { dataSource, id, color, width } = lineItem;
-      // handle with coordinates
-      // { lng, lat } => [lng, lat]
-      for (let item of dataSource) {
-        const { lng, lat, height } = item;
-        result.push(lng);
-        result.push(lat);
-        if (height) {
-          result.push(height);
-        }
-      }
-      viewer.entities.add({
-        name: id || 'undefined line name',
-        polyline: {
-          customData: lineItem,
-          positions: Cesium.Cartesian3.fromDegreesArrayHeights(result),
-          width,
-          arcType: (Cesium as any).ArcType.RHUMB,
-          material: this.formatColor(color),
-        },
-      });
-    }
-  };
-
-  private formatColor = (color: string | undefined) => {
-    let material: Cesium.Color | string | undefined = color;
-    if (!color) {
-      material = Cesium.Color.TRANSPARENT;
-    } else if (color) {
-      material = Cesium.Color.fromCssColorString(color);
-    }
-    return material;
   };
 }

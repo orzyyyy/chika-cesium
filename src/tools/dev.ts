@@ -1,4 +1,5 @@
 import Cesium from 'cesium';
+import { noop } from '../utils';
 
 type CoordinateFunction = (
   latitude: string,
@@ -11,9 +12,9 @@ export interface DevToolProps {
 }
 
 export default class DevTool {
-  constructor(viewer: Cesium.Viewer, options: DevToolProps) {
+  constructor(viewer: Cesium.Viewer, options?: DevToolProps) {
+    options = Object.assign({}, { coordinate: noop }, options);
     const { coordinate } = options;
-
     if (coordinate) {
       this.consoleCoordinate(viewer, coordinate);
     }

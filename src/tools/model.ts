@@ -1,4 +1,5 @@
 import Cesium from 'cesium';
+import { noop } from '../utils';
 
 export interface ModelProps {
   paths: Array<string>;
@@ -7,7 +8,12 @@ export interface ModelProps {
 }
 
 export default class Model {
-  constructor(viewer: Cesium.Viewer, options: ModelProps) {
+  constructor(viewer: Cesium.Viewer, options?: ModelProps) {
+    options = Object.assign(
+      {},
+      { paths: [], onHover: noop, onClick: noop },
+      options,
+    );
     const { paths, onHover, onClick } = options;
     if (paths) {
       this.loadModels(viewer, paths, () => {

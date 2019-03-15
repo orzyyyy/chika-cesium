@@ -1,3 +1,4 @@
+import Cesium from 'cesium';
 import { CommonItem } from '../dispatcher';
 
 export const getCenterPointFromCoordinates = ({
@@ -17,3 +18,15 @@ export const getCenterPointFromCoordinates = ({
     ...rest,
   };
 };
+
+export const formatColor = (color: string | undefined) => {
+  let material: Cesium.Color | string | undefined = color;
+  if (!color) {
+    material = Cesium.Color.TRANSPARENT;
+  } else if (color) {
+    material = Cesium.Color.fromCssColorString(color);
+  }
+  return material;
+};
+
+export function noop() {}

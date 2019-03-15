@@ -7,7 +7,8 @@ export interface PointProps {
 import { CommonItem } from '../dispatcher';
 
 export default class Point {
-  constructor(viewer: Cesium.Viewer, options: PointProps) {
+  constructor(viewer: Cesium.Viewer, options?: PointProps) {
+    options = Object.assign({}, { dataSource: [] }, options);
     const { dataSource } = options;
 
     if (dataSource) {
