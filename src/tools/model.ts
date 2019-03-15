@@ -1,13 +1,13 @@
 import Cesium from 'cesium';
 
-export interface ModelOptions {
+export interface ModelProps {
   paths: Array<string>;
   onHover?: Function;
   onClick?: Function;
 }
 
 export default class Model {
-  constructor(viewer: Cesium.Viewer, options: ModelOptions) {
+  constructor(viewer: Cesium.Viewer, options: ModelProps) {
     const { paths, onHover, onClick } = options;
     if (paths) {
       this.loadModels(viewer, paths, () => {

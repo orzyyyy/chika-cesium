@@ -1,5 +1,6 @@
 import Cesium from 'cesium';
-import Model, { ModelOptions } from '../tools/model';
+import Model, { ModelProps } from '../tools/model';
+import DevTool, { DevToolProps } from '../tools/dev';
 
 const defaultViewerOptions = {
   animation: false,
@@ -42,8 +43,8 @@ export default class Trunk {
   constructor(
     root: string | HTMLElement,
     options?: {
-      dev?: boolean;
-      model?: ModelOptions;
+      dev?: DevToolProps;
+      model?: ModelProps;
       pointDatas?: Array<any>;
       modelPaths?: Array<string>;
       onClick?: (name: string, position: any, pick: any) => void;
@@ -61,7 +62,7 @@ export default class Trunk {
         new Model(viewer, options.model);
       }
       if (options.dev) {
-        this.consoleCoordinate(viewer);
+        new DevTool(viewer, options.dev);
       }
       if (options.pointDatas) {
         this.drawPoints(viewer, options.pointDatas);
@@ -259,33 +260,5 @@ export default class Trunk {
       material = Cesium.Color.fromCssColorString(color);
     }
     return material;
-  };
-
-  private consoleCoordinate = (viewer: any) => {
-    const canvas = viewer.scene.canvas;
-    const ellipsoid = viewer.scene.globe.ellipsoid;
-    const handler = new Cesium.ScreenSpaceEventHandler(canvas);
-    handler.setInputAction((movement: any) => {
-      const cartesian = viewer.camera.pickEllipsoid(
-        movement.endPosition,
-        ellipsoid,
-      );
-      if (cartesian) {
-        const cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(
-          cartesian,
-        );
-        const latitude = Cesium.Math.toDegrees(cartographic.latitude).toFixed(
-          4,
-        );
-        const longitude = Cesium.Math.toDegrees(cartographic.longitude).toFixed(
-          4,
-        );
-        const altitude = (
-          viewer.camera.positionCartographic.height / 1000
-        ).toFixed(2);
-        // eslint-disable-next-line
-        console.log(longitude, latitude, altitude);
-      }
-    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   };
 }
