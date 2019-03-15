@@ -3,3 +3,5 @@ declare module '*.json' {
   export default value;
 }
 declare module 'weatherstar-switch';
+declare module 'chika-cesium';
+declare module 'chika-cesium/utils';

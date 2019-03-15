@@ -11,54 +11,74 @@ A model loader using cesium, with some trick functions.
 ## Usage
 
 ```js
-import { Trunk } from '..';
+import { ChikaToy } from 'chika-cesium';
 
-new Trunk('root', options);
-```
-
-For more detail, you can check [here](./src/demo/index.ts).
-
-## API
-
-### options
-
-```jsx
 type PointType = 'pin' | 'text' | 'none' | undefined;
+
+type CoordinateItem = {
+  lng: number,
+  lat: number,
+  height?: number,
+};
+
 type CommonItem = {
-  dataSource: Array<{
-    lng: number,
-    lat: number,
-    height?: number,
-  }>,
+  dataSource: Array<CoordinateItem>,
   name?: string,
   id?: string,
   color?: string,
   type?: PointType,
   table?: TableItem,
+  text?: string,
   width?: number | string,
-};
+} & CoordinateItem;
+
+const trunk = new ChikaToy('root', {
+  // notice your console when passing a function,
+  // it will output coordinate infos with its callback
+  dev?: {
+    coordinate?: ({
+      latitude: string,
+      longitude: string,
+      altitude: string,
+    }) => void,
+  },
+  // load models with paths,
+  // notice that when this prop is null, it wouldn't show anything
+  // Emmmm...maybe
+  model?: {
+    paths?: Array<string>,
+  },
+  // draw pinners in the scene, notice that if data item contains prop `name`,
+  // it would draw a pinner with text of `name`,
+  // or it would draw using [icons](https://labs.mapbox.com/maki-icons/)
+  point?: {
+    dataSource?: Array<CommonItem>,
+  },
+  // draw lines with coordinates
+  line?: {
+    dataSource?: Array<CommonItem>,
+  },
+  // draw polygons with coordinates
+  polygon?: {
+    dataSource?: Array<CommonItem>,
+  },
+  // when initial completed,
+  // this would be called with current instance of ChikaToy
+  onMount?: () => void,
+  // when you click your entities,
+  // this function would be called
+  //
+  // @pick the entity you click on
+  onClick?: (pick.id, position, pick) => void,
+  //  when you hover on your entities,
+  // this function would be called
+  //
+  // @pick the entity you click on
+  onHover?: (pick.id, position, pick) => void,
+});
 ```
 
-| name       | description                                                                                                                                                                               | type                              | default |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- | ------- |
-| dev        | notice your console when set to true, it will output coordinate infos                                                                                                                     | boolean                           | false   |
-| pointDatas | draw pinners in the scene, notice that if data item contains prop `name`, it would draw a pinner with text of `name`, or it would draw using [icons](https://labs.mapbox.com/maki-icons/) | Array<{}: CommonItem>             | []      |
-| modelPaths | load models with paths, notice that this prop is null, it wouldn't show anything. Emmmm...maybe                                                                                           | Array<paths: string>              | []      |
-| polygon    | draw polygons with coordinates                                                                                                                                                            | Array<{}: CommonItem>             | []      |
-| line       | draw lines with coordinates                                                                                                                                                               | Array<{}: CommonItem>             | []      |
-| onClick    | when you click your entities, this function would be called                                                                                                                               | (pick.id, position, pick) => void | -       |
-| onHover    | when you hover on your entities, this function would be called                                                                                                                            | (pick.id, position, pick) => void | -       |
-| onMount    | when initial completed, this would be called with current instance of Trunk                                                                                                               | (trunk: Trunk) => void            | -       |
-
-Note `CommonItem`:
-
-if you want to draw pin on polygon, you should pass prop `id`,
-
-and in other case like drawing `text`, you should pass props both `id` and `name`,
-
-`name` for text showing in pin, and `id` will be passed back in callback like `onClick`
-
-`width` is using for `drawLine`
+Check [here](./src/demo/index.ts) for more details.
 
 ## Development
 

@@ -1,27 +1,28 @@
-import { Trunk } from '..';
+import { ChikaToy } from 'chika-cesium';
 import './assets/popup.css';
-import { PointType } from '../core';
+import { getCenterPointFromCoordinates } from 'chika-cesium/utils';
 import Switch from 'weatherstar-switch';
 import 'weatherstar-switch/dist/switch.css';
 
 let switchStatus = 'hidden';
 
+const dataSource = [
+  {
+    lng: 121.449,
+    lat: 0.0382,
+    height: 28,
+  },
+  {
+    lng: 121.4485,
+    lat: 0.0388,
+    height: 40,
+  },
+  { lng: 121.4485, lat: 0.0406, height: 40 },
+  { lng: 121.449, lat: 0.0392, height: 40 },
+];
 const lineProps = [
   {
-    dataSource: [
-      {
-        lng: 121.449,
-        lat: 0.0382,
-        height: 28,
-      },
-      {
-        lng: 121.4485,
-        lat: 0.0388,
-        height: 40,
-      },
-      { lng: 121.4485, lat: 0.0406, height: 40 },
-      { lng: 121.449, lat: 0.0392, height: 40 },
-    ],
+    dataSource,
     color: 'red',
     id: 'testLine',
     width: 5,
@@ -29,22 +30,11 @@ const lineProps = [
 ];
 const polygonProps = [
   {
-    dataSource: [
-      {
-        lng: 121.449,
-        lat: 0.0382,
-      },
-      {
-        lng: 121.4485,
-        lat: 0.0388,
-      },
-      { lng: 121.4485, lat: 0.0406 },
-      { lng: 121.449, lat: 0.0392 },
-    ],
+    dataSource,
     id: 'testId',
     name: 'testName',
     color: '#F96',
-    type: 'pin' as PointType,
+    type: 'pin',
     table: {
       columns: [
         { key: 'name', name: 'name' },
@@ -60,9 +50,14 @@ const polygonProps = [
   },
 ];
 
-const trunk = new Trunk('root', {
-  modelPaths: ['../mock/3dtileout/tileset.json'],
-  onMount: (trunk: Trunk) => {
+const trunk = new ChikaToy('root', {
+  model: {
+    paths: ['../mock/3dtileout/tileset.json'],
+  },
+  point: {
+    dataSource: [getCenterPointFromCoordinates(polygonProps[0])],
+  },
+  onMount: ({ viewer, line, polygon, point }: any) => {
     const switchWrapper = document.createElement('input');
     switchWrapper.className = 'switch-wrapper';
     switchWrapper.type = 'checkbox';
@@ -85,7 +80,7 @@ const trunk = new Trunk('root', {
           }, 0);
         },
         onChange: () => {
-          trunk.viewer.entities.removeAll();
+          viewer.entities.removeAll();
           let newPolygonProps = [];
           if (switchStatus === 'hidden') {
             newPolygonProps = polygonProps;
@@ -99,8 +94,11 @@ const trunk = new Trunk('root', {
             }
             switchStatus = 'hidden';
           }
-          trunk.drawPolygon(viewer, newPolygonProps);
-          trunk.drawLine(viewer, lineProps);
+          polygon.drawPolygon(viewer, newPolygonProps);
+          line.drawLine(viewer, lineProps);
+          point.drawPoints(viewer, [
+            getCenterPointFromCoordinates(polygonProps[0]),
+          ]);
         },
       },
     );
@@ -166,6 +164,6 @@ const trunk = new Trunk('root', {
   },
 });
 
-const { viewer, drawPolygon, drawLine } = trunk;
-drawPolygon(viewer, polygonProps);
-drawLine(viewer, lineProps);
+const { viewer, polygon, line } = trunk;
+polygon.drawPolygon(viewer, polygonProps);
+line.drawLine(viewer, lineProps);
