@@ -15,6 +15,7 @@
     "backup": "npm config set registry=https://registry.npmjs.org && npm publish && npm config set registry=https://registry.npm.taobao.org",
     "pub": "npm run build && npm run compile && git push origin master && npm publish"
   },
+  "main": "lib",
   "keywords": [
     "cesium"
   ],
@@ -40,7 +41,7 @@
   },
   "dependencies": {
     "cesium": "^1.55.0",
-    "nino-cli": "^0.6.3"
+    "nino-cli": "^0.6.5"
   },
   "pre-commit": [
     "lint-staged"
