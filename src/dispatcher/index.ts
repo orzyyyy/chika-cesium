@@ -1,4 +1,5 @@
 import Cesium from 'cesium';
+import Model, { ModelOptions } from '../tools/model';
 
 const defaultViewerOptions = {
   animation: false,
@@ -42,6 +43,7 @@ export default class Trunk {
     root: string | Element,
     options?: {
       dev?: boolean;
+      model?: ModelOptions;
       pointDatas?: Array<any>;
       modelPaths?: Array<string>;
       onClick?: (name: string, position: any, pick: any) => void;
@@ -55,14 +57,14 @@ export default class Trunk {
     (viewer as any)._cesiumWidget._creditContainer.style.display = 'none';
 
     if (options) {
+      if (options.model) {
+        new Model(viewer, options.model);
+      }
       if (options.dev) {
         this.consoleCoordinate(viewer);
       }
       if (options.pointDatas) {
         this.drawPoints(viewer, options.pointDatas);
-      }
-      if (options.modelPaths) {
-        this.loadModels(viewer, options.modelPaths);
       }
       if (options.onClick) {
         this.bindClickEvent(viewer, options.onClick);
@@ -129,30 +131,6 @@ export default class Trunk {
         }
       }
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-  };
-
-  private loadModels = (viewer: any, paths: Array<string>) => {
-    for (let url of paths) {
-      viewer.scene.primitives
-        .add(
-          new Cesium.Cesium3DTileset({
-            url,
-            maximumScreenSpaceError: 2,
-            maximumNumberOfLoadedTiles: 1000,
-          }),
-        )
-        .readyPromise.then((tileset: any) => {
-          const boundingSphere = tileset.boundingSphere;
-          viewer.camera.viewBoundingSphere(
-            boundingSphere,
-            new Cesium.HeadingPitchRange(0.0, -0.5, boundingSphere.radius),
-          );
-          viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
-        })
-        .otherwise((error: any) => {
-          console.error(error);
-        });
-    }
   };
 
   private getCenterPointFromCoordinates = ({

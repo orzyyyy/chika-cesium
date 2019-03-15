@@ -1,6 +1,6 @@
 import { Trunk } from '..';
 import './assets/popup.css';
-import { PointType } from '../core';
+import { PointType } from '../dispatcher';
 import Switch from 'weatherstar-switch';
 import 'weatherstar-switch/dist/switch.css';
 
@@ -61,7 +61,9 @@ const polygonProps = [
 ];
 
 const trunk = new Trunk('root', {
-  modelPaths: ['../mock/3dtileout/tileset.json'],
+  model: {
+    paths: ['../mock/3dtileout/tileset.json'],
+  },
   onMount: (trunk: Trunk) => {
     const switchWrapper = document.createElement('input');
     switchWrapper.className = 'switch-wrapper';
