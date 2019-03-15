@@ -1,6 +1,7 @@
 import Cesium from 'cesium';
 import Model, { ModelProps } from '../tools/model';
 import DevTool, { DevToolProps } from '../tools/dev';
+import Point, { PointProps } from '../tools/point';
 
 const defaultViewerOptions = {
   animation: false,
@@ -45,8 +46,7 @@ export default class Trunk {
     options?: {
       dev?: DevToolProps;
       model?: ModelProps;
-      pointDatas?: Array<any>;
-      modelPaths?: Array<string>;
+      point?: PointProps;
       onClick?: (name: string, position: any, pick: any) => void;
       onHover?: (name: string, position: any, pick: any) => void;
       polygon?: Array<CommonItem>;
@@ -64,8 +64,8 @@ export default class Trunk {
       if (options.dev) {
         new DevTool(viewer, options.dev);
       }
-      if (options.pointDatas) {
-        this.drawPoints(viewer, options.pointDatas);
+      if (options.point) {
+        new Point(viewer, options.point);
       }
       if (options.onClick) {
         this.bindClickEvent(viewer, options.onClick);
@@ -152,54 +152,6 @@ export default class Trunk {
     };
   };
 
-  drawPoints = (viewer: any, dataSource: Array<any>) => {
-    const pinBuilder = new Cesium.PinBuilder();
-    for (let item of dataSource) {
-      const { lng, lat, id, name, color, type } = item;
-      if (type === 'text') {
-        viewer.entities.add({
-          name,
-          position: Cesium.Cartesian3.fromDegrees(
-            parseFloat(lng),
-            parseFloat(lat),
-            30,
-          ),
-          billboard: {
-            image: pinBuilder
-              .fromText(name, Cesium.Color.ORANGE, 100)
-              .toDataURL(),
-            verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-            width: name.length * 40,
-            height: name.length * 30,
-          },
-        });
-      } else if (type === 'pin') {
-        (Cesium as any).when(
-          pinBuilder.fromMakiIconId(
-            'building',
-            Cesium.Color.fromCssColorString(color),
-            60,
-          ),
-          (canvas: any) => {
-            return viewer.entities.add({
-              name: id,
-              position: Cesium.Cartesian3.fromDegrees(
-                parseFloat(lng),
-                parseFloat(lat),
-                30,
-              ),
-              billboard: {
-                image: canvas.toDataURL(),
-                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-              },
-            });
-          },
-        );
-      } else if (type === 'none' || !type) {
-      }
-    }
-  };
-
   drawPolygon = (viewer: any, polygon: Array<CommonItem>) => {
     let centers = [];
     for (let item of polygon) {
@@ -222,7 +174,7 @@ export default class Trunk {
       });
       centers.push(this.getCenterPointFromCoordinates(item));
     }
-    this.drawPoints(viewer, centers);
+    // this.drawPoints(viewer, centers);
   };
 
   drawLine = (viewer: any, line: Array<CommonItem>) => {
