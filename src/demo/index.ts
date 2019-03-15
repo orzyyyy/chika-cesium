@@ -57,7 +57,7 @@ const trunk = new ChikaToy('root', {
   point: {
     dataSource: [getCenterPointFromCoordinates(polygonProps[0])],
   },
-  onMount: (trunk: any) => {
+  onMount: ({ viewer, line, polygon, point }: any) => {
     const switchWrapper = document.createElement('input');
     switchWrapper.className = 'switch-wrapper';
     switchWrapper.type = 'checkbox';
@@ -80,7 +80,7 @@ const trunk = new ChikaToy('root', {
           }, 0);
         },
         onChange: () => {
-          trunk.viewer.entities.removeAll();
+          viewer.entities.removeAll();
           let newPolygonProps = [];
           if (switchStatus === 'hidden') {
             newPolygonProps = polygonProps;
@@ -94,9 +94,9 @@ const trunk = new ChikaToy('root', {
             }
             switchStatus = 'hidden';
           }
-          trunk.drawPolygon(viewer, newPolygonProps);
-          trunk.drawLine(viewer, lineProps);
-          trunk.point.drawPoints(viewer, [
+          polygon.drawPolygon(viewer, newPolygonProps);
+          line.drawLine(viewer, lineProps);
+          point.drawPoints(viewer, [
             getCenterPointFromCoordinates(polygonProps[0]),
           ]);
         },
@@ -164,6 +164,6 @@ const trunk = new ChikaToy('root', {
   },
 });
 
-const { viewer, drawPolygon, drawLine } = trunk;
-drawPolygon(viewer, polygonProps);
-drawLine(viewer, lineProps);
+const { viewer, polygon, line } = trunk;
+polygon.drawPolygon(viewer, polygonProps);
+line.drawLine(viewer, lineProps);
