@@ -42,6 +42,9 @@ export type CommonItem = {
 
 export default class Trunk {
   viewer: Cesium.Viewer;
+  model: Model;
+  devTool: DevTool;
+  point: Point;
 
   constructor(
     root: string | HTMLElement,
@@ -61,13 +64,13 @@ export default class Trunk {
 
     if (options) {
       if (options.model) {
-        new Model(viewer, options.model);
+        this.model = new Model(viewer, options.model);
       }
       if (options.dev) {
-        new DevTool(viewer, options.dev);
+        this.devTool = new DevTool(viewer, options.dev);
       }
       if (options.point) {
-        new Point(viewer, options.point);
+        this.point = new Point(viewer, options.point);
       }
       if (options.onClick) {
         this.bindClickEvent(viewer, options.onClick);

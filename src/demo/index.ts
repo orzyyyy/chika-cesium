@@ -106,6 +106,9 @@ const trunk = new ChikaToy('root', {
           }
           trunk.drawPolygon(viewer, newPolygonProps);
           trunk.drawLine(viewer, lineProps);
+          trunk.point.drawPoints(viewer, [
+            getCenterPointFromCoordinates(polygonProps[0]),
+          ]);
         },
       },
     );
