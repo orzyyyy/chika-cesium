@@ -7,13 +7,23 @@ export interface ModelOptions {
 }
 
 export default class Model {
-  constructor(viewer: any, options: ModelOptions) {
-    if (options.paths) {
-      this.loadModels(viewer, options.paths);
+  constructor(viewer: Cesium.Viewer, options: ModelOptions) {
+    const { paths, onHover, onClick } = options;
+    if (paths) {
+      this.loadModels(viewer, paths, () => {
+        if (onHover) {
+        }
+        if (onClick) {
+        }
+      });
     }
   }
 
-  private loadModels = (viewer: any, paths: Array<string>) => {
+  private loadModels = (
+    viewer: any,
+    paths: Array<string>,
+    callback?: Function,
+  ) => {
     for (let url of paths) {
       viewer.scene.primitives
         .add(
@@ -30,6 +40,7 @@ export default class Model {
             new Cesium.HeadingPitchRange(0.0, -0.5, boundingSphere.radius),
           );
           viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+          callback && callback();
         })
         .otherwise((error: any) => {
           console.error(error);

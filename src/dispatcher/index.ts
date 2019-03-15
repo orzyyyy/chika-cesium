@@ -37,10 +37,10 @@ type CommonItem = {
 };
 
 export default class Trunk {
-  viewer: any;
+  viewer: Cesium.Viewer;
 
   constructor(
-    root: string | Element,
+    root: string | HTMLElement,
     options?: {
       dev?: boolean;
       model?: ModelOptions;
