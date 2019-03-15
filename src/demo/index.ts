@@ -1,6 +1,6 @@
-import { ChikaToy as Trunk } from '..';
+import { ChikaToy } from 'chika-cesium';
 import './assets/popup.css';
-import { PointType } from '../dispatcher';
+import { getCenterPointFromCoordinates } from 'chika-cesium/utils';
 import Switch from 'weatherstar-switch';
 import 'weatherstar-switch/dist/switch.css';
 
@@ -44,7 +44,7 @@ const polygonProps = [
     id: 'testId',
     name: 'testName',
     color: '#F96',
-    type: 'pin' as PointType,
+    type: 'pin',
     table: {
       columns: [
         { key: 'name', name: 'name' },
@@ -60,11 +60,14 @@ const polygonProps = [
   },
 ];
 
-const trunk = new Trunk('root', {
+const trunk = new ChikaToy('root', {
   model: {
     paths: ['../mock/3dtileout/tileset.json'],
   },
-  onMount: (trunk: Trunk) => {
+  point: {
+    dataSource: [getCenterPointFromCoordinates(polygonProps[0])],
+  },
+  onMount: (trunk: any) => {
     const switchWrapper = document.createElement('input');
     switchWrapper.className = 'switch-wrapper';
     switchWrapper.type = 'checkbox';

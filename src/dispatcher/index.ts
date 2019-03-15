@@ -2,6 +2,7 @@ import Cesium from 'cesium';
 import Model, { ModelProps } from '../tools/model';
 import DevTool, { DevToolProps } from '../tools/dev';
 import Point, { PointProps } from '../tools/point';
+import { getCenterPointFromCoordinates } from '../utils';
 
 const defaultViewerOptions = {
   animation: false,
@@ -24,7 +25,7 @@ type TableItem = {
   columns: Array<{ key: string; name: string }>;
   dataSource: Array<any>;
 };
-type CommonItem = {
+export type CommonItem = {
   dataSource: Array<{
     lng: number;
     lat: number;
@@ -134,24 +135,6 @@ export default class Trunk {
     }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
   };
 
-  private getCenterPointFromCoordinates = ({
-    dataSource,
-    ...rest
-  }: CommonItem) => {
-    const total = dataSource.length;
-    let totalLng = 0;
-    let totalLat = 0;
-    for (let { lng, lat } of dataSource) {
-      totalLng += lng;
-      totalLat += lat;
-    }
-    return {
-      lng: totalLng / total,
-      lat: totalLat / total,
-      ...rest,
-    };
-  };
-
   drawPolygon = (viewer: any, polygon: Array<CommonItem>) => {
     let centers = [];
     for (let item of polygon) {
@@ -172,7 +155,7 @@ export default class Trunk {
           material: this.formatColor(color),
         },
       });
-      centers.push(this.getCenterPointFromCoordinates(item));
+      centers.push(getCenterPointFromCoordinates(item));
     }
     // this.drawPoints(viewer, centers);
   };
