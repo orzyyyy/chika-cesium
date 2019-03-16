@@ -33,6 +33,7 @@
     "dekko": "^0.2.1",
     "eslint": "^5.14.1",
     "html-webpack-include-assets-plugin": "^1.0.7",
+    "html2canvas": "^1.0.0-alpha.12",
     "lint-staged": "^8.1.5",
     "pre-commit": "^1.2.2",
     "prettier": "^1.15.3",
