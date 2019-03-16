@@ -6,6 +6,7 @@ export interface PointProps {
   type?: PointType;
 }
 import { CommonItem } from '../dispatcher';
+import './assets/point.css';
 
 export default class Point {
   constructor(viewer: Cesium.Viewer, options?: PointProps) {
@@ -59,15 +60,15 @@ export default class Point {
   ) => {
     const wrapper = document.createElement('div');
     wrapper.innerHTML = `
-      <div style="background: ${color};">testtetettesttetettesttetet</div>
-      <div class="popup-tip-container popup-tip" style="top: 0px; background: blue; z-index: -1;"></div>
+      <div class="point" style="background: ${color};">testtetettesttetettesttetet</div>
+      <div class="point-after" style="background-color: ${color} transparent transparent transparent;"></div>
     `;
     wrapper.id = 'wrapper';
     wrapper.style.position = 'absolute';
     document.body.appendChild(wrapper);
     html2canvas(document.querySelector('#wrapper'), {
       logging: false,
-      height: 40,
+      height: 60,
       backgroundColor: null,
     }).then((canvas: HTMLCanvasElement) => {
       viewer.entities.add({

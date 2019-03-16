@@ -1,0 +1,26 @@
+.point {
+  background: -webkit-gradient(linear, left top, left bottom, from(#f9d835), to(#f3961c));
+  background: -moz-linear-gradient(top, #f9d835, #f3961c);
+  background: -o-linear-gradient(top, #f9d835, #f3961c);
+  background: linear-gradient(top, #f9d835, #f3961c);
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 5px;
+  width: 220px;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+}
+
+.point-after {
+  width: 0;
+  height: 0;
+  display: block;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #f3961c transparent transparent transparent;
+  position: absolute;
+  bottom: -39px;
+  left: 110px;
+  transform: scale(2, 12);
+}
