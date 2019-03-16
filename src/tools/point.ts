@@ -19,7 +19,7 @@ export default class Point {
     const { dataSource, type: parentType } = options;
     for (let item of dataSource) {
       const { type: childType } = item;
-      const type = childType || parentType;
+      const type = childType || parentType || 'popup';
       switch (type) {
         case 'popup':
           this.drawPopup(viewer, item);
@@ -53,12 +53,12 @@ export default class Point {
 
   private drawPopup = (
     viewer: any,
-    { id, color = '#F96', lng, lat }: CommonItem,
+    { id, color = '#F96', lng, lat, text }: CommonItem,
   ) => {
     const wrapper = document.createElement('div');
     wrapper.innerHTML = `
-      <div class="point" style="background: ${color};">testtetettesttetettesttetet</div>
-      <div class="point-after" style="background-color: ${color} transparent transparent transparent;"></div>
+      <div class="point" style="background: ${color}; width: 220px; height: 30px; line-height: 30px;">${text}</div>
+      <div class="point-after" style="background-color: ${color} transparent transparent transparent; left: 110px; bottom: -39px;"></div>
     `;
     wrapper.id = 'wrapper';
     wrapper.style.position = 'absolute';

@@ -26,7 +26,7 @@ type TableItem = {
   columns: Array<{ key: string; name: string }>;
   dataSource: Array<any>;
 };
-type CoordinateItem = {
+export type CoordinateItem = {
   lng: number;
   lat: number;
   height?: number;

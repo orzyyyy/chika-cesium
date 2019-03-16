@@ -1,10 +1,9 @@
 import Cesium from 'cesium';
-import { CommonItem } from '../dispatcher';
+import { CoordinateItem } from '../dispatcher';
 
-export const getCenterPointFromCoordinates = ({
-  dataSource,
-  ...rest
-}: CommonItem) => {
+export const getCenterPointFromCoordinates = (
+  dataSource: Array<CoordinateItem>,
+) => {
   const total = dataSource.length;
   let totalLng = 0;
   let totalLat = 0;
@@ -15,7 +14,6 @@ export const getCenterPointFromCoordinates = ({
   return {
     lng: totalLng / total,
     lat: totalLat / total,
-    ...rest,
   };
 };
 

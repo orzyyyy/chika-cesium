@@ -34,7 +34,7 @@ const polygonProps = [
     id: 'testId',
     name: 'testName',
     color: '#F96',
-    type: 'popup',
+    text: 'test',
     table: {
       columns: [
         { key: 'name', name: 'name' },
@@ -49,13 +49,21 @@ const polygonProps = [
     },
   },
 ];
+const pointDatas = {
+  id: 'testId',
+  color: '#F96',
+  text: 'test',
+};
 
 new ChikaToy('root', {
   model: {
     paths: ['../mock/3dtileout/tileset.json'],
   },
   point: {
-    dataSource: [getCenterPointFromCoordinates(polygonProps[0])],
+    dataSource: [
+      { ...getCenterPointFromCoordinates(dataSource), ...pointDatas },
+    ],
+    type: 'popup',
   },
   onMount: ({ viewer, line, polygon }: any) => {
     const switchWrapper = document.createElement('input');

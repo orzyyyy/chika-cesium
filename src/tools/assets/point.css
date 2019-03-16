@@ -6,10 +6,7 @@
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
   border-radius: 5px;
-  width: 220px;
   text-align: center;
-  height: 30px;
-  line-height: 30px;
 }
 
 .point-after {
@@ -20,7 +17,5 @@
   border-width: 3px;
   border-color: #f3961c transparent transparent transparent;
   position: absolute;
-  bottom: -39px;
-  left: 110px;
   transform: scale(2, 12);
 }
