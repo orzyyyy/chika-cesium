@@ -5,3 +5,4 @@ declare module '*.json' {
 declare module 'weatherstar-switch';
 declare module 'chika-cesium';
 declare module 'chika-cesium/utils';
+declare module 'html2canvas';
