@@ -34,7 +34,7 @@ const polygonProps = [
     id: 'testId',
     name: 'testName',
     color: '#F96',
-    type: 'pin',
+    type: 'popup',
     table: {
       columns: [
         { key: 'name', name: 'name' },
@@ -50,14 +50,14 @@ const polygonProps = [
   },
 ];
 
-const trunk = new ChikaToy('root', {
+new ChikaToy('root', {
   model: {
     paths: ['../mock/3dtileout/tileset.json'],
   },
   point: {
     dataSource: [getCenterPointFromCoordinates(polygonProps[0])],
   },
-  onMount: ({ viewer, line, polygon, point }: any) => {
+  onMount: ({ viewer, line, polygon }: any) => {
     const switchWrapper = document.createElement('input');
     switchWrapper.className = 'switch-wrapper';
     switchWrapper.type = 'checkbox';
@@ -96,9 +96,6 @@ const trunk = new ChikaToy('root', {
           }
           polygon.drawPolygon(viewer, newPolygonProps);
           line.drawLine(viewer, lineProps);
-          point.drawPoints(viewer, [
-            getCenterPointFromCoordinates(polygonProps[0]),
-          ]);
         },
       },
     );
@@ -163,7 +160,3 @@ const trunk = new ChikaToy('root', {
     }
   },
 });
-
-const { viewer, polygon, line } = trunk;
-polygon.drawPolygon(viewer, polygonProps);
-line.drawLine(viewer, lineProps);
