@@ -52,8 +52,15 @@ const polygonProps = [
 const pointDatas = {
   id: 'testId',
   color: '#F96',
-  text: 'test',
+  text: 'testtest<br/>test',
   type: 'popup',
+  style: {
+    left: 110,
+    top: 93,
+    height: 60,
+    width: 220,
+    pinHeight: 100,
+  },
 };
 
 new ChikaToy('root', {
