@@ -5,8 +5,23 @@ export interface PointProps {
   dataSource: Array<CommonItem>;
   type?: PointType;
 }
+export type PointStyle = {
+  background: string;
+  width: string;
+  height: string;
+  left: string;
+  top: string;
+};
 import { CommonItem } from '../dispatcher';
 import './assets/point.css';
+
+const defaultPointStyle = {
+  background: '#f3961c transparent transparent transparent',
+  width: '220px',
+  height: '30px',
+  left: '110px',
+  top: '63px',
+};
 
 export default class Point {
   constructor(viewer: Cesium.Viewer, options?: PointProps) {
@@ -53,15 +68,23 @@ export default class Point {
 
   private drawPopup = (
     viewer: any,
-    { id, color = '#F96', lng, lat, text }: CommonItem,
+    { id, lng, lat, text, style }: CommonItem,
   ) => {
+    style = Object.assign({}, defaultPointStyle, style);
     const wrapper = document.createElement('div');
     wrapper.innerHTML = `
-      <div class="point" style="background: ${color}; width: 220px; height: 30px; line-height: 30px;">${text}</div>
-      <div class="point-after" style="background-color: ${color} transparent transparent transparent; left: 110px; bottom: -39px;"></div>
+      <div class="point" style="background: ${style.background}; width: ${
+      style.width
+    }; height: ${style.height}; line-height: ${style.height};">${text}</div>
+      <div class="point-after" style="background-color: ${
+        style.background
+      } transparent transparent transparent; left: ${style.left}; top: ${
+      style.top
+    };"></div>
     `;
     wrapper.id = 'wrapper';
     wrapper.style.position = 'absolute';
+    // wrapper.style.top = '0px';
     document.body.appendChild(wrapper);
     html2canvas(document.querySelector('#wrapper'), {
       logging: false,

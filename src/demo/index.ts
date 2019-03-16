@@ -53,6 +53,7 @@ const pointDatas = {
   id: 'testId',
   color: '#F96',
   text: 'test',
+  type: 'popup',
 };
 
 new ChikaToy('root', {
@@ -63,7 +64,6 @@ new ChikaToy('root', {
     dataSource: [
       { ...getCenterPointFromCoordinates(dataSource), ...pointDatas },
     ],
-    type: 'popup',
   },
   onMount: ({ viewer, line, polygon }: any) => {
     const switchWrapper = document.createElement('input');

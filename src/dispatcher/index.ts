@@ -4,7 +4,7 @@ import DevTool, { DevToolProps } from '../tools/dev';
 import Point, { PointProps } from '../tools/point';
 import Line, { LineProps } from '../tools/line';
 import Polygon, { PolygonProps } from '../tools/polygon';
-import { PointType } from '../tools/point';
+import { PointType, PointStyle } from '../tools/point';
 
 const defaultViewerOptions = {
   animation: false,
@@ -40,6 +40,7 @@ export type CommonItem = {
   table?: TableItem;
   text?: string;
   width?: number | string;
+  style?: PointStyle;
 } & CoordinateItem;
 type TrunkProps = {
   dev?: DevToolProps;
