@@ -34,6 +34,7 @@ const polygonProps = [
     id: 'testId',
     name: 'testName',
     color: '#F96',
+    hoverColor: 'yellow',
     text: 'test',
     table: {
       columns: [

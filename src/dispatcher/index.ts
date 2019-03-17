@@ -36,6 +36,7 @@ export type CommonItem = {
   name?: string;
   id?: string;
   color?: string;
+  hoverColor?: string;
   type?: PointType;
   table?: TableItem;
   text?: string;
@@ -98,7 +99,11 @@ export default class Trunk {
     const makeProperty = (entity: Cesium.Entity, color: Cesium.Color) => {
       const colorProperty: any = new Cesium.CallbackProperty((_, result) => {
         if (pickedEntities.contains(entity)) {
-          return Cesium.Color.YELLOW.withAlpha(0.5).clone(result);
+          const hoverColor =
+            ((entity as any).customData &&
+              (entity as any).customData.hoverColor) ||
+            'red';
+          return Cesium.Color.fromCssColorString(hoverColor).clone(result);
         }
         return color.clone(result);
       }, false);
@@ -116,7 +121,9 @@ export default class Trunk {
         for (let i = 0; i < drillPick.length; i++) {
           const entity = drillPick[i].id;
           if (entity) {
-            makeProperty(entity, Cesium.Color.RED.withAlpha(0.5));
+            const color =
+              (entity.customData && entity.customData.color) || '#ccc';
+            makeProperty(entity, Cesium.Color.fromCssColorString(color));
             pickedEntities.add(entity);
           }
         }
