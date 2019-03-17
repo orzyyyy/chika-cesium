@@ -1,5 +1,6 @@
 import Cesium from 'cesium';
 import { noop } from '../utils';
+import Base from '../dispatcher/base';
 
 export interface ModelProps {
   paths: Array<string>;
@@ -7,8 +8,9 @@ export interface ModelProps {
   onClick?: Function;
 }
 
-export default class Model {
-  constructor(viewer: Cesium.Viewer, options?: ModelProps) {
+export default class Model extends Base {
+  constructor(root: string | HTMLElement, options?: ModelProps) {
+    super(root);
     options = Object.assign(
       {},
       { paths: [], onHover: noop, onClick: noop },
@@ -16,7 +18,7 @@ export default class Model {
     );
     const { paths, onHover, onClick } = options;
     if (paths) {
-      this.loadModels(viewer, paths, () => {
+      this.loadModels(paths, () => {
         if (onHover) {
         }
         if (onClick) {
@@ -26,11 +28,8 @@ export default class Model {
     return this;
   }
 
-  private loadModels = (
-    viewer: any,
-    paths: Array<string>,
-    callback?: Function,
-  ) => {
+  private loadModels = (paths: Array<string>, callback?: Function) => {
+    const viewer = this.viewer;
     for (let url of paths) {
       viewer.scene.primitives
         .add(

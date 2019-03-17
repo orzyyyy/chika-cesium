@@ -110,8 +110,8 @@ new ChikaToy('root', {
             }
             switchStatus = 'hidden';
           }
-          polygon.drawPolygon(viewer, newPolygonProps);
-          line.drawLine(viewer, lineProps);
+          polygon.drawPolygon(newPolygonProps);
+          line.drawLine(lineProps);
         },
       },
     );

@@ -1,21 +1,23 @@
 import Cesium from 'cesium';
 import { formatColor } from '../utils';
 import { CommonItem } from '../dispatcher';
+import Base from '../dispatcher/base';
 
 export interface PolygonProps {
   dataSource: Array<CommonItem>;
 }
 
-export default class Polygon {
-  constructor(viewer: Cesium.Viewer, options?: PolygonProps) {
+export default class Polygon extends Base {
+  constructor(root: string | HTMLElement, options?: PolygonProps) {
+    super(root);
     options = Object.assign({}, { dataSource: [] }, options);
     const { dataSource } = options;
 
-    this.drawPolygon(viewer, dataSource);
+    this.drawPolygon(dataSource);
     return this;
   }
 
-  public drawPolygon = (viewer: any, dataSource: Array<CommonItem>) => {
+  public drawPolygon = (dataSource: Array<CommonItem>) => {
     for (let item of dataSource) {
       let result = [];
       const { dataSource, id, color } = item;
@@ -26,7 +28,7 @@ export default class Polygon {
         result.push(lng);
         result.push(lat);
       }
-      viewer.entities.add({
+      this.viewer.entities.add({
         customData: item,
         name: id || 'undefined polygon name',
         polygon: {
