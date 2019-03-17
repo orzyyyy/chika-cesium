@@ -5,22 +5,7 @@ import Point, { PointProps } from '../tools/point';
 import Line, { LineProps } from '../tools/line';
 import Polygon, { PolygonProps } from '../tools/polygon';
 import { PointType, PointStyle } from '../tools/point';
-
-const defaultViewerOptions = {
-  animation: false,
-  vrButton: false,
-  geocoder: false,
-  infoBox: false,
-  sceneModePicker: false,
-  selectionIndicator: false,
-  timeline: false,
-  navigationHelpButton: false,
-  scene3DOnly: false,
-  homeButton: false,
-  navigationInstructionsInitiallyVisible: false,
-  fullscreenButton: false,
-  baseLayerPicker: false,
-};
+import Base from './base';
 
 type TableItem = {
   columns: Array<{ key: string; name: string }>;
@@ -54,7 +39,7 @@ type TrunkProps = {
   onMount?: (instance: Trunk) => void;
 };
 
-export default class Trunk {
+export default class Trunk extends Base {
   viewer: Cesium.Viewer;
   model: Model;
   devTool: DevTool;
@@ -63,38 +48,38 @@ export default class Trunk {
   polygon: Polygon;
 
   constructor(root: string | HTMLElement, options?: TrunkProps) {
-    const viewer = new Cesium.Viewer(root, defaultViewerOptions);
-    (viewer as any)._cesiumWidget._creditContainer.style.display = 'none';
-    this.viewer = viewer;
+    super(root, { devOptions: (options && options.dev) || {} });
     if (!options) {
       options = {};
     }
 
-    this.devTool = new DevTool(viewer, options.dev);
-    this.model = new Model(viewer, options.model);
-    this.point = new Point(viewer, options.point);
-    this.polygon = new Polygon(viewer, options.polygon);
-    this.line = new Line(viewer, options.line);
-    this.bindClickEvent(viewer, options.onClick);
-    this.bindHoverEvent(viewer, options.onHover);
+    this.devTool = new DevTool(root, options.dev);
+    this.model = new Model(root, options.model);
+    this.point = new Point(root, options.point);
+    this.polygon = new Polygon(root, options.polygon);
+    this.line = new Line(root, options.line);
+    this.bindClickEvent(options.onClick);
+    this.bindHoverEvent(options.onHover);
     if (options.onMount) {
       options.onMount(this);
     }
     return this;
   }
 
-  private bindClickEvent = (viewer: any, callback?: Function) => {
-    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+  private bindClickEvent = (callback?: Function) => {
+    const handler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene
+      .canvas as any);
     handler.setInputAction(({ position }: any) => {
-      const pick = viewer.scene.pick(position);
+      const pick = this.viewer.scene.pick(position);
       if (pick && pick.id && callback) {
         callback(pick.id, position, pick);
       }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
   };
 
-  private bindHoverEvent = (viewer: any, callback?: Function) => {
-    const handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+  private bindHoverEvent = (callback?: Function) => {
+    const handler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene
+      .canvas as any);
 
     const makeProperty = (entity: Cesium.Entity, color: Cesium.Color) => {
       const colorProperty: any = new Cesium.CallbackProperty((_, result) => {
@@ -115,7 +100,7 @@ export default class Trunk {
     };
     const pickedEntities = new (Cesium as any).EntityCollection();
     handler.setInputAction(({ endPosition }: any) => {
-      const drillPick = viewer.scene.drillPick(endPosition);
+      const drillPick = this.viewer.scene.drillPick(endPosition);
       if (Cesium.defined(drillPick)) {
         pickedEntities.removeAll();
         for (let i = 0; i < drillPick.length; i++) {
@@ -130,7 +115,7 @@ export default class Trunk {
       }
 
       if (callback) {
-        const pick = viewer.scene.pick(endPosition);
+        const pick = this.viewer.scene.pick(endPosition);
         if (Cesium.defined(pick) && pick && pick.id) {
           callback(pick.id!._customData, endPosition, pick);
         } else {

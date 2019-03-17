@@ -28,7 +28,7 @@
   "devDependencies": {
     "@types/cesium": "^1.54.1",
     "@types/classnames": "^2.2.7",
-    "babel-eslint": "^10.0.1",
+    "@typescript-eslint/parser": "^1.4.2",
     "classnames": "^2.2.6",
     "dekko": "^0.2.1",
     "eslint": "^5.14.1",

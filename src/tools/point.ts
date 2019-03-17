@@ -1,5 +1,7 @@
 import Cesium from 'cesium';
 import html2canvas from 'html2canvas';
+import Base from '../dispatcher/base';
+
 export type PointType = 'pin' | 'popup' | 'none' | undefined;
 export interface PointProps {
   dataSource: Array<CommonItem>;
@@ -27,25 +29,26 @@ const defaultPointStyle: PointStyle = {
   pinHeight: 70,
 };
 
-export default class Point {
-  constructor(viewer: Cesium.Viewer, options?: PointProps) {
+export default class Point extends Base {
+  constructor(root: string | HTMLElement, options?: PointProps) {
+    super(root);
     options = Object.assign({}, { dataSource: [] }, options);
-    this.drawPoints(viewer, options);
+    this.drawPoints(options);
     return this;
   }
 
-  drawPoints = (viewer: any, options: PointProps) => {
+  drawPoints = (options: PointProps) => {
     const { dataSource, type: parentType } = options;
     for (let item of dataSource) {
       const { type: childType } = item;
       const type = childType || parentType || 'popup';
       switch (type) {
         case 'popup':
-          this.drawPopup(viewer, item);
+          this.drawPopup(item);
           break;
 
         case 'pin':
-          this.drawText(viewer, item);
+          this.drawText(item);
           break;
 
         default:
@@ -54,9 +57,9 @@ export default class Point {
     }
   };
 
-  private drawText = (viewer: any, { lng, lat, text = '' }: CommonItem) => {
+  private drawText = ({ lng, lat, text = '' }: CommonItem) => {
     const pinBuilder = new Cesium.PinBuilder();
-    viewer.entities.add({
+    this.viewer.entities.add({
       name: text,
       position: Cesium.Cartesian3.fromDegrees(lng, lat, 30),
       billboard: {
@@ -70,10 +73,7 @@ export default class Point {
     });
   };
 
-  private drawPopup = (
-    viewer: any,
-    { id, lng, lat, text, style }: CommonItem,
-  ) => {
+  private drawPopup = ({ id, lng, lat, text, style }: CommonItem) => {
     style = Object.assign({}, defaultPointStyle, style);
     const wrapper = document.createElement('div');
     wrapper.innerHTML = `
@@ -89,14 +89,16 @@ export default class Point {
     }px;"></div>
     `;
     wrapper.style.position = 'absolute';
-    // wrapper.style.top = '0px';
+    if (this.devOptions && this.devOptions.debugPopup) {
+      wrapper.style.top = '0px';
+    }
     document.body.appendChild(wrapper);
     html2canvas(wrapper, {
       logging: false,
       height: style.pinHeight,
       backgroundColor: null,
     }).then((canvas: HTMLCanvasElement) => {
-      viewer.entities.add({
+      this.viewer.entities.add({
         name: id,
         position: Cesium.Cartesian3.fromDegrees(lng, lat, 30),
         billboard: {
@@ -104,7 +106,9 @@ export default class Point {
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
         },
       });
-      document.body.removeChild(wrapper);
+      if (!this.devOptions) {
+        document.body.removeChild(wrapper);
+      }
     });
   };
 }

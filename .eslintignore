@@ -3,3 +3,4 @@
 *.css
 /lib/
 index.d.ts
+/src/**/*.js

@@ -1,5 +1,6 @@
 import Cesium from 'cesium';
 import { noop } from '../utils';
+import Base from '../dispatcher/base';
 
 type CoordinateFunction = (
   latitude: string,
@@ -9,20 +10,23 @@ type CoordinateFunction = (
 
 export interface DevToolProps {
   coordinate?: CoordinateFunction;
+  debugPopup?: boolean;
 }
 
-export default class DevTool {
-  constructor(viewer: Cesium.Viewer, options?: DevToolProps) {
+export default class DevTool extends Base {
+  constructor(root: string | HTMLElement, options?: DevToolProps) {
+    super(root);
     options = Object.assign({}, { coordinate: noop }, options);
     const { coordinate } = options;
     if (coordinate) {
-      this.consoleCoordinate(viewer, coordinate);
+      this.consoleCoordinate(coordinate);
     }
     return this;
   }
 
-  private consoleCoordinate = (viewer: any, callback: CoordinateFunction) => {
-    const canvas = viewer.scene.canvas;
+  private consoleCoordinate = (callback: CoordinateFunction) => {
+    const viewer = this.viewer;
+    const canvas: any = viewer.scene.canvas;
     const ellipsoid = viewer.scene.globe.ellipsoid;
     const handler = new Cesium.ScreenSpaceEventHandler(canvas);
     handler.setInputAction((movement: any) => {
