@@ -89,7 +89,9 @@ export default class Point extends Base {
     }px;"></div>
     `;
     wrapper.style.position = 'absolute';
-    // wrapper.style.top = '0px';
+    if (this.devOptions && this.devOptions.debugPopup) {
+      wrapper.style.top = '0px';
+    }
     document.body.appendChild(wrapper);
     html2canvas(wrapper, {
       logging: false,
@@ -104,7 +106,9 @@ export default class Point extends Base {
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
         },
       });
-      document.body.removeChild(wrapper);
+      if (!this.devOptions) {
+        document.body.removeChild(wrapper);
+      }
     });
   };
 }

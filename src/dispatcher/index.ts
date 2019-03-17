@@ -48,7 +48,7 @@ export default class Trunk extends Base {
   polygon: Polygon;
 
   constructor(root: string | HTMLElement, options?: TrunkProps) {
-    super(root);
+    super(root, { devOptions: (options && options.dev) || {} });
     if (!options) {
       options = {};
     }

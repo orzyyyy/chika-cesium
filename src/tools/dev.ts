@@ -10,6 +10,7 @@ type CoordinateFunction = (
 
 export interface DevToolProps {
   coordinate?: CoordinateFunction;
+  debugPopup?: boolean;
 }
 
 export default class DevTool extends Base {

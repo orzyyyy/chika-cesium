@@ -65,6 +65,7 @@ const pointDatas = {
 };
 
 new ChikaToy('root', {
+  // dev: { debugPopup: true },
   model: {
     paths: ['../mock/3dtileout/tileset.json'],
   },
