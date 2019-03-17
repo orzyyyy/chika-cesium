@@ -102,7 +102,11 @@ export default class Trunk {
         }
         return color.clone(result);
       }, false);
-      entity.polygon.material = new Cesium.ColorMaterialProperty(colorProperty);
+      if (entity.polygon) {
+        entity.polygon.material = new Cesium.ColorMaterialProperty(
+          colorProperty,
+        );
+      }
     };
     const pickedEntities = new (Cesium as any).EntityCollection();
     handler.setInputAction(({ endPosition }: any) => {
