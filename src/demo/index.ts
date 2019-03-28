@@ -33,26 +33,20 @@ const polygonProps = [
     dataSource,
     id: 'testId',
     name: 'testName',
-    color: '#F96',
-    hoverColor: 'yellow',
+    color: 'rgba(41, 103, 222, 0.5)',
+    hoverColor: 'rgba(65, 125, 241, 0.5)',
     text: 'test',
     table: {
-      columns: [
-        { key: 'name', name: 'name' },
-        { key: 'title', name: 'title' },
-        { key: 'place', name: 'place' },
-      ],
       dataSource: [
-        { name: 'name1', title: 'title1', place: 'place1' },
-        { name: 'name2', title: 'title2', place: 'place2' },
-        { name: 'name3', title: 'title3', place: 'place3' },
+        { name: 'name: ', value: 'name' },
+        { name: 'title: ', value: 'title' },
+        { name: 'place: ', value: 'place' },
       ],
     },
   },
 ];
 const pointDatas = {
   id: 'testId',
-  color: '#F96',
   text: 'testtest<br/>test',
   type: 'popup',
   style: {
@@ -61,6 +55,9 @@ const pointDatas = {
     height: 60,
     width: 220,
     pinHeight: 100,
+    background: 'rgba(0, 0, 0, 0.5)',
+    color: '#fff',
+    border: '2px solid rgba(115, 161, 255)',
   },
 };
 
@@ -146,32 +143,32 @@ new ChikaToy('root', {
   onHover: (dataItem: any, { x, y }: any) => {
     const tooltip: HTMLElement | null = document.getElementById('tooltip');
     if (tooltip && dataItem) {
-      const tableHeight = 200;
-      const tableWidth = 400;
-      let table = `<table style="text-align: center; width: 100%; height: ${tableHeight}px;" class="popup-content-wrapper"><tr>`;
+      const tableHeight = 105;
+      const tableWidth = 250;
+      let table = `<div style="text-align: center; width: 100%; height: ${tableHeight}px; z-index: 10; position: relative;" class="popup-content-wrapper">`;
       if (dataItem) {
-        for (let column of dataItem.table.columns) {
-          table += `<th>${column.name}</th>`;
-        }
-        table += '</tr>';
         for (let item of dataItem.table.dataSource) {
-          table += '<tr>';
-          for (let column of dataItem.table.columns) {
-            table += `<td>${item[column.key]}</td>`;
-          }
-          table += '</tr>';
+          const height = item.value.length > 13 ? 45 : 35;
+          table += `
+              <div style="width: 30%; text-align: right; float: left; height: ${height}px;">${
+            item.name
+          }</div>
+              <div style="width: 70%; text-align: center; float: left; height: ${height}px;">${
+            item.value
+          }</div>
+            `;
         }
-        table += '</table>';
+        table += '</div>';
       }
-      table += '<div class="popup-tip-container popup-tip"></div>';
+      // table += '<div class="popup-tip-container popup-tip"></div>';
       tooltip.innerHTML = `
-      <div style="position: absolute; top: ${y -
-        tableHeight -
-        15}px; left: ${x -
+        <div style="position: absolute; top: ${y -
+          tableHeight -
+          30}px; left: ${x -
         tableWidth / 2}px; width: ${tableWidth}px; height: ${tableHeight}px;">
-        ${table}
-      </div>
-    `;
+          ${table}
+        </div>
+      `;
     } else if (tooltip && !dataItem) {
       tooltip.innerHTML = '';
     }
