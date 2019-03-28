@@ -15,6 +15,8 @@ export type PointStyle = {
   top: number;
   lineHeight: number;
   pinHeight: number;
+  color: string;
+  border: string;
 };
 import { CommonItem } from '../dispatcher';
 import './assets/point.css';
@@ -27,6 +29,8 @@ const defaultPointStyle: PointStyle = {
   top: 63,
   lineHeight: 30,
   pinHeight: 70,
+  color: '#000',
+  border: '1px solid #fff',
 };
 
 export default class Point extends Base {
@@ -77,12 +81,12 @@ export default class Point extends Base {
     style = Object.assign({}, defaultPointStyle, style);
     const wrapper = document.createElement('div');
     wrapper.innerHTML = `
-      <div class="point" style="background: ${style.background}px; width: ${
+      <div class="point" style="background: ${style.background}; width: ${
       style.width
     }px; height: ${style.height}px; line-height: ${
       style.lineHeight
-    }px;">${text}</div>
-      <div class="point-after" style="background-color: ${
+    }px; color: ${style.color}; border: ${style.border};">${text}</div>
+      <div class="point-after" style="border-color: ${
         style.background
       } transparent transparent transparent; left: ${style.left}px; top: ${
       style.top
