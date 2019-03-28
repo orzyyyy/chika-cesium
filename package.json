@@ -38,6 +38,7 @@
     "pre-commit": "^1.2.2",
     "prettier": "^1.16.4",
     "react-is": "^16.8.6",
+    "react-test-renderer": "^16.8.6",
     "ts-loader": "^5.3.3",
     "weatherstar-switch": "^1.0.7"
   },
