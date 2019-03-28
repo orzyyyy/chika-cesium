@@ -26,23 +26,23 @@
   "author": "zy9",
   "license": "MIT",
   "devDependencies": {
-    "@types/cesium": "^1.54.1",
+    "@types/cesium": "^1.54.2",
     "@types/classnames": "^2.2.7",
-    "@typescript-eslint/parser": "^1.4.2",
+    "@typescript-eslint/parser": "^1.5.0",
     "classnames": "^2.2.6",
     "dekko": "^0.2.1",
-    "eslint": "^5.14.1",
+    "eslint": "^5.15.3",
     "html-webpack-include-assets-plugin": "^1.0.7",
     "html2canvas": "^1.0.0-alpha.12",
     "lint-staged": "^8.1.5",
     "pre-commit": "^1.2.2",
-    "prettier": "^1.15.3",
+    "prettier": "^1.16.4",
     "ts-loader": "^5.3.3",
     "weatherstar-switch": "^1.0.7"
   },
   "dependencies": {
     "cesium": "^1.55.0",
-    "nino-cli": "^0.6.5"
+    "nino-cli": "^0.6.6"
   },
   "pre-commit": [
     "lint-staged"
