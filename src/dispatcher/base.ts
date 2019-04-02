@@ -15,11 +15,13 @@ const defaultViewerOptions = {
   navigationInstructionsInitiallyVisible: false,
   fullscreenButton: false,
   baseLayerPicker: false,
-  imageryProvider: new Cesium.UrlTemplateImageryProvider({
-    url:
-      'https://api.mapbox.com/styles/v1/gisjvm/cjrjkuagm1q422so0gfx2hxje/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2lzanZtIiwiYSI6ImNqcmpqdmthODBjOWM0NG8wdzBxZHR0eDcifQ.KU07Wizm4w9fH0mn0Hst8g',
-  }),
+  // imageryProvider: new Cesium.UrlTemplateImageryProvider({
+  //   url:
+  //     'https://api.mapbox.com/styles/v1/gisjvm/cjrjkuagm1q422so0gfx2hxje/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2lzanZtIiwiYSI6ImNqcmpqdmthODBjOWM0NG8wdzBxZHR0eDcifQ.KU07Wizm4w9fH0mn0Hst8g',
+  // }),
 };
+(Cesium as any).Ion.defaultAccessToken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2ZjVkZDdjMC0zNWNjLTRkMTktODM0YS1lNzVkYjQwNWQzNmEiLCJpZCI6NDMyLCJpYXQiOjE1MjUyNDI1NDR9.gnm-s8YmqoAXwQTr-dT-CCQkGxe5jk_8b6xFUd1VxgY';
 
 export default class Base {
   static instance: Base;
