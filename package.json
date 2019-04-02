@@ -26,6 +26,7 @@
   "author": "zy9",
   "license": "MIT",
   "devDependencies": {
+    "@babel/polyfill": "^7.4.0",
     "@types/cesium": "^1.54.2",
     "@types/classnames": "^2.2.7",
     "@typescript-eslint/parser": "^1.5.0",

@@ -1,3 +1,4 @@
+import '@babel/polyfill';
 import { ChikaToy } from 'chika-cesium';
 import './assets/popup.css';
 import { getCenterPointFromCoordinates } from 'chika-cesium/utils';
