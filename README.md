@@ -4,6 +4,8 @@
 
 A model loader using cesium, with some trick functions.
 
+https://zy410419243.github.io/chika-cesium/
+
 ## Screenshots
 
 <img src="./docs/screenshot.png" />
