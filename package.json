@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nino go -c ./scripts/nino.go.js -e ./src/demo",
     "test": "nino test",
-    "dist": "tsc && nino koei -c ./scripts/nino.koei.js",
+    "build": "tsc && nino koei -c ./scripts/nino.koei.js",
     "compile": "tsc && nino compile",
     "codecov": "nino test -d",
     "dev": "nino koei -w-d",
@@ -26,13 +26,13 @@
   "author": "zy9",
   "license": "MIT",
   "devDependencies": {
-    "@babel/polyfill": "^7.4.0",
+    "@babel/polyfill": "^7.4.3",
     "@types/cesium": "^1.54.2",
     "@types/classnames": "^2.2.7",
-    "@typescript-eslint/parser": "^1.5.0",
+    "@typescript-eslint/parser": "^1.6.0",
     "classnames": "^2.2.6",
     "dekko": "^0.2.1",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "html-webpack-include-assets-plugin": "^1.0.7",
     "html2canvas": "^1.0.0-alpha.12",
     "lint-staged": "^8.1.5",
@@ -42,8 +42,8 @@
     "weatherstar-switch": "^1.0.7"
   },
   "dependencies": {
-    "cesium": "^1.55.0",
-    "nino-cli": "^0.6.6"
+    "cesium": "^1.56.1",
+    "nino-cli": "^0.7.1"
   },
   "pre-commit": [
     "lint-staged"
