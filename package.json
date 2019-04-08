@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nino go -c ./scripts/nino.go.js -e ./src/demo",
     "test": "nino test",
-    "dist": "tsc && nino koei -c ./scripts/nino.koei.js",
+    "build": "tsc && nino koei -c ./scripts/nino.koei.js",
     "compile": "tsc && nino compile",
     "codecov": "nino test -d",
     "dev": "nino koei -w-d",
