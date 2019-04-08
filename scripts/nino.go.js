@@ -5,22 +5,26 @@ const webpack = require('webpack');
 module.exports = {
   webpack: {
     externals: {
-      cesium: 'Cesium'
+      cesium: 'Cesium',
     },
     plugins: [
       new CopyWebpackPlugin([
         {
           from: 'node_modules/cesium/Build/CesiumUnminified',
-          to: 'cesium'
-        }
+          to: 'cesium',
+        },
+        {
+          from: 'src/demo/assets',
+          to: './assets',
+        },
       ]),
       new HtmlWebpackIncludeAssetsPlugin({
         append: false,
-        assets: ['cesium/Widgets/widgets.css', 'cesium/Cesium.js']
+        assets: ['cesium/Widgets/widgets.css', 'cesium/Cesium.js'],
       }),
       new webpack.DefinePlugin({
-        CESIUM_BASE_URL: JSON.stringify('cesium')
-      })
-    ]
-  }
+        CESIUM_BASE_URL: JSON.stringify('cesium'),
+      }),
+    ],
+  },
 };
