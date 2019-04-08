@@ -4,21 +4,25 @@ const webpack = require('webpack');
 
 module.exports = {
   externals: {
-    cesium: 'Cesium'
+    cesium: 'Cesium',
   },
   plugins: [
     new CopyWebpackPlugin([
       {
         from: 'node_modules/cesium/Build/Cesium',
-        to: 'cesium'
-      }
+        to: 'cesium',
+      },
+      {
+        from: './.circleci/config.yml',
+        to: '.circleci/config.yml',
+      },
     ]),
     new HtmlWebpackIncludeAssetsPlugin({
       append: false,
-      assets: ['cesium/Widgets/widgets.css', 'cesium/Cesium.js']
+      assets: ['cesium/Widgets/widgets.css', 'cesium/Cesium.js'],
     }),
     new webpack.DefinePlugin({
-      CESIUM_BASE_URL: JSON.stringify('cesium')
-    })
-  ]
+      CESIUM_BASE_URL: JSON.stringify('cesium'),
+    }),
+  ],
 };
