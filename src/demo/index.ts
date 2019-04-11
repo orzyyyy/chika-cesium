@@ -139,9 +139,13 @@ new ChikaToy('root', {
           modal.innerHTML = '';
         });
       }
+      const tooltip: HTMLElement | null = document.getElementById('tooltip');
+      if (tooltip) {
+        tooltip.innerHTML = '';
+      }
     }
   },
-  onHover: (dataItem: any, { x, y }: any) => {
+  onHover: (dataItem: any, { x, y }: { x: number; y: number }) => {
     const tooltip: HTMLElement | null = document.getElementById('tooltip');
     if (tooltip && dataItem) {
       const tableHeight = 105;
@@ -161,7 +165,6 @@ new ChikaToy('root', {
         }
         table += '</div>';
       }
-      // table += '<div class="popup-tip-container popup-tip"></div>';
       tooltip.innerHTML = `
         <div style="position: absolute; top: ${y -
           tableHeight -
