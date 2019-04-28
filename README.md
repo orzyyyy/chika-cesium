@@ -1,10 +1,11 @@
 # chika-cesium
 
-![CircleCI branch](https://img.shields.io/circleci/project/github/zy410419243/chika-cesium/master.svg) [![codecov](https://codecov.io/gh/zy410419243/chika-cesium/branch/master/graph/badge.svg)](https://codecov.io/gh/zy410419243/chika-cesium) [![Greenkeeper badge](https://badges.greenkeeper.io/zy410419243/chika-cesium.svg)](https://greenkeeper.io/)
+![CircleCI branch](https://img.shields.io/circleci/project/github/zy410419243/chika-cesium/master.svg)
+[![codecov](https://codecov.io/gh/zy410419243/chika-cesium/branch/master/graph/badge.svg)](https://codecov.io/gh/zy410419243/chika-cesium)
 
 A model loader using cesium, with some trick functions.
 
-https://zy410419243.github.io/chika-cesium/
+Online demo: https://zy410419243.github.io/chika-cesium/
 
 ## Screenshots
 
