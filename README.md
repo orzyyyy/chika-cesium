@@ -73,7 +73,7 @@ const trunk = new ChikaToy('root', {
   //
   // @pick the entity you click on
   onClick?: (pick.id, position, pick) => void,
-  //  when you hover on your entities,
+  // when you hover on your entities,
   // this function would be called
   //
   // @pick the entity you click on
