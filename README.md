@@ -3,9 +3,11 @@
 ![CircleCI branch](https://img.shields.io/circleci/project/github/zy410419243/chika-cesium/master.svg)
 [![codecov](https://codecov.io/gh/zy410419243/chika-cesium/branch/master/graph/badge.svg)](https://codecov.io/gh/zy410419243/chika-cesium)
 
+English | [简体中文](./README-zh_CN.md)
+
 A model loader using cesium, with some trick functions.
 
-Online demo: https://zy410419243.github.io/chika-cesium/
+Online demo: https://zy410419243.github.io/chika-cesium
 
 ## Screenshots
 
