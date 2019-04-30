@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "cesium": "^1.56.1",
-    "nino-cli": "^0.7.1"
+    "nino-cli": "^0.8.0"
   },
   "pre-commit": [
     "lint-staged"
